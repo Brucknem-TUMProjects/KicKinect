@@ -1,0 +1,150 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TUM-Vorlage: Plakat A0 Querformat
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Rechteinhaber:
+%     Technische Universität München
+%     https://www.tum.de
+% 
+% Gestaltung:
+%     ediundsepp Gestaltungsgesellschaft, München
+%     http://www.ediundsepp.de
+% 
+% Technische Umsetzung:
+%     eWorks GmbH, Frankfurt am Main
+%     http://www.eworks.de
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\input{./Ressourcen/Plakat/PraeambelA0Quer.tex} % !!! NICHT ENTFERNEN !!!
+\input{./Ressourcen/Plakat/PraeambelA1Quer.tex} % !!! NICHT ENTFERNEN !!!
+\input{./_Einstellungen.tex}                    % !!! DATEI ANPASSEN !!!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newcommand{\PlakatTitel}{Kickinect - VR Torwandschießen}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{./Ressourcen/Plakat/Anfang.tex} % !!! NICHT ENTFERNEN !!!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%% 3-Spalten-Layout %%
+%%%%%%%%%%%%%%%%%%%%%%
+
+\PlakatKopfzeileLeer
+\PlakatFusszeile{%
+    \textbf{\UniversitaetName}\\
+    \FakultaetName\\
+    \LehrstuhlName%
+}
+
+\PlakatTitelEins{\PlakatTitel}
+%\PlakatTitelZwei{Überschrift 2 läuft über gesamte Papierbreite}
+\PlakatTitelDrei{Marcel Bruckner, Kevin Bein, }
+
+\begin{multicols*}{3}
+
+% Examples
+%\input{./PlakatBeschreibung.tex}
+
+\PlakatUeberschrift{Abstract}
+
+The goal of this project is to recreate the popular german game \textit{Torwandschießen} in VR. 
+
+\PlakatUeberschrift{Game}
+
+In \textit{Torwandschießen}, the player tries to kick a football through two openings in a wall.
+One hole is aligned at the bottom left and the other hole is at the top right.
+The player has five tries to kick the Ball through either of the two openings and collect points (1 point for the bottom and 3 points for the top hole).
+Both holes are just slightly bigger than the diamter of the ball which makes it difficult to hit.
+
+
+\PlakatUeberschrift{Implementation}
+
+A Microsoft Kinect Sensor is used to track the player and his movements.
+From this input data, a body skeleton is calculated and extracted (TODO: figure 2).
+By using \textit{Linear Blend Skinning}, this skeleton is mapped onto the 3D Model of a football player.
+For this game, it is especially important to detect movements of the lower body: the player's legs and foots.
+Hitboxes are constructed around the players feet and the ball. 
+If both collide in the virtual reality, we calculate and apply a velocity to the ball and accelarate it towards the Torwand.
+When either of the two holes is hit perfectly, the corresponding points are accredited.
+The game ends after five tries.
+
+\end{multicols*}
+
+\clearpage
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%% 5-Spalten-Layout %%
+%%%%%%%%%%%%%%%%%%%%%%
+
+%\PlakatKopfzeileMitDreizeiler
+%\PlakatFusszeileLeer
+%
+%\PlakatTitelEins{\PlakatTitel}
+%\PlakatTitelZwei{Überschrift 2 läuft über gesamte Papierbreite}
+%\PlakatTitelDrei{Überschrift 3 läuft über gesamte Papierbreite oder gemäß Spaltenbreite}
+%
+%\begin{multicols*}{5}
+%
+%\setlength{\PlakatBeschreibungBeispielbildBeschnitt}{15cm} % Anpassen der Größe des Beispielbildes
+%\input{./PlakatBeschreibung.tex}
+%
+%
+%\PlakatUeberschrift{Blindtext}
+%
+%\lipsum[1-8]
+%
+%
+%\end{multicols*}
+%
+%\clearpage
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%% 1-Bild-Layout    %%
+%%%%%%%%%%%%%%%%%%%%%%
+
+%\PlakatKopfzeileMitEinzeiler
+%\PlakatFusszeileMehrspaltig{
+%    Hier kann ein längerer Text stehen, der in mehreren Spalten angeordnet wird.
+%    \vfill\columnbreak
+%    Durch \texttt{\textbackslash{}vfill\textbackslash{}columnbreak} lässt sich ein Spaltenwechsel erzwingen.
+%    \vfill\columnbreak~
+%    \vfill\columnbreak~
+%    \vfill\columnbreak~
+%    \vfill\columnbreak~
+%    \vfill\columnbreak~
+%    \vfill\columnbreak~
+%    \vfill\columnbreak~
+%}
+%
+%\PlakatTitelEins{\PlakatTitel}
+%\PlakatTitelZwei{Überschrift 2 läuft über gesamte Papierbreite}
+%
+%\PlakatBildGanzseitig[0cm 18cm 0cm 0cm]{./Ressourcen/_Bilder/SternenhimmelQuer.jpg}{Bildunterschrift, Autor etc}
+%
+%
+%\clearpage
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Layout für wenig Text %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\PlakatKopfzeileMitEinzeiler
+%\PlakatFusszeileLeer
+%
+%\PlakatTitelSchriftgroesse
+%
+%Wählen Sie für Plakate mit wenig Text gerne eine größere Schrift (siehe Auswahl für Überschriften). Achten Sie bitte darauf, dass die Schriftgröße Zweck und Gebrauch des Plakats entspricht.
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document} % !!! NICHT ENTFERNEN !!!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInterface
 {
-    private static readonly float sideDelta = 0.1f;
-    private static readonly float frontDelta = 0.4f;
     private static readonly float upDelta = 0.5f;
 
     public GameObject ball;
