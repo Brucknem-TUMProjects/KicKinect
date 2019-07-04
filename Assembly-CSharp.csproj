@@ -64,14 +64,14 @@
     <Compile Include="Assets\_Scripts\BackgroundImageSwitcher.cs" />
     <Compile Include="Assets\_Scripts\BallBehaviour.cs" />
     <Compile Include="Assets\_Scripts\BallReset_Keyboard.cs" />
-    <Compile Include="Assets\_Scripts\DLL\Ceres.cs" />
     <Compile Include="Assets\_Scripts\GestureManager.cs" />
     <Compile Include="Assets\_Scripts\Kalman\KalmanFilter.cs" />
     <Compile Include="Assets\_Scripts\Kick_Keyboard.cs" />
+    <Compile Include="Assets\_Scripts\LinearBlendSkinner.cs" />
+    <Compile Include="Assets\_Scripts\LinearBlendSkinningManager.cs" />
     <Compile Include="Assets\_Scripts\RecordAndReplay\DepthImageRecorder.cs" />
     <Compile Include="Assets\_Scripts\RecordAndReplay\DepthImageReplayer.cs" />
     <Compile Include="Assets\_Scripts\RecordAndReplay\MockKinectManager.cs" />
-    <Compile Include="Assets\_Scripts\RecordAndReplay\SkeletonMock.cs" />
     <Compile Include="Assets\_Scripts\RecordAndReplay\VelocitiesSaver.cs" />
     <Compile Include="Assets\_Scripts\RigidbodyExtension.cs" />
     <Compile Include="Assets\_Scripts\ScoreReceiverBehaviour.cs" />

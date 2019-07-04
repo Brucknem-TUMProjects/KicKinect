@@ -61,17 +61,15 @@ public class BodySourceManager : MonoBehaviour
                 }
                 
                 frame.GetAndRefreshBodyData(_Data);
-
-
-
+                
                 if (!mock)
                 {
-                    if (PrintBodyTrackingStatus((int)(Time.time * 1000), _Data))
+                    if (HasTrackedBody(_Data))
                     {
                         IBody[] currentBodies = (IBody[])_Data.Clone();
                         i++;
-                        File.WriteAllText(standardDirectory + i + ".json", JsonConvert.SerializeObject(currentBodies));
-                    }
+                        File.WriteAllText(standardDirectory + "frame (" + i + ").json", JsonConvert.SerializeObject(currentBodies));
+                    } 
                 }
 
                 frame.Dispose();
@@ -99,19 +97,15 @@ public class BodySourceManager : MonoBehaviour
         }
     }
     
-    private bool PrintBodyTrackingStatus(int i, ICollection<IBody> bodies)
+    public static bool HasTrackedBody(ICollection<IBody> bodies)
     {
-        string s = "Frame: " + i + " --- ";
-        bool hasTrackedBody = false;
         foreach (IBody body in bodies)
         {
             if (body.IsTracked)
             {
-                Debug.Log("Found a tracked one!!!");
-                hasTrackedBody = true;
+                return true;
             }
-            s += " - " + body.IsTracked;
         }
-        return hasTrackedBody;
+        return false;
     }
 }

@@ -31,7 +31,7 @@ public class BodySourceView : MonoBehaviour
         { Kinect.JointType.ShoulderLeft, Kinect.JointType.SpineShoulder },
         
         { Kinect.JointType.HandTipRight, Kinect.JointType.HandRight },
-        { Kinect.JointType.ThumbRight, Kinect.JointType.HandRight },
+        { Kinect.JointType.ThumbRight, Kinect.JointType.HandRight }, 
         { Kinect.JointType.HandRight, Kinect.JointType.WristRight },
         { Kinect.JointType.WristRight, Kinect.JointType.ElbowRight },
         { Kinect.JointType.ElbowRight, Kinect.JointType.ShoulderRight },
@@ -110,20 +110,16 @@ public class BodySourceView : MonoBehaviour
     private GameObject CreateBodyObject(ulong id)
     {
         GameObject body = new GameObject("Body:" + id);
-        //body.AddComponent<SkeletonMock>();
         
         for (Kinect.JointType jt = Kinect.JointType.SpineBase; jt <= Kinect.JointType.ThumbRight; jt++)
         {
             GameObject jointObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
             
             LineRenderer lr = jointObj.AddComponent<LineRenderer>();
-            //lr.SetVertexCount(2);
             lr.positionCount = 2;
             lr.material = BoneMaterial;
-            //lr.SetWidth(0.05f, 0.05f);
             lr.startWidth = 0.05f;
             lr.endWidth = 0.05f;
-            
             jointObj.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             jointObj.name = jt.ToString();
             jointObj.transform.parent = body.transform;

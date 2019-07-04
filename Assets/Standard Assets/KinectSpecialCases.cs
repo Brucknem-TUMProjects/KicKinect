@@ -420,201 +420,7 @@ namespace Windows.Kinect
         }
 
     }
-
-    public abstract class IKinectSensor
-    {
-        public abstract IBodyFrameSource BodyFrameSource { get; }
-        public abstract bool IsOpen { get; }
-        public abstract void Open();
-        public abstract void Close();
-    }
-
-    public sealed partial class KinectSensorMock : IKinectSensor
-    {
-        private BodyFrameSourceMock source = new BodyFrameSourceMock();
-
-        public override IBodyFrameSource BodyFrameSource
-        {
-            get
-            {
-                return source;
-            }
-        }
-
-        public override bool IsOpen => true;
-
-        public override void Close() { }
-
-        public override void Open() { }
-    }
-
-    internal class BodyFrameSourceMock : IBodyFrameSource
-    {
-        public override int BodyCount => reader.BodyCount;
-
-        private BodyFrameReaderMock reader;
-
-        public override IBodyFrameReader OpenReader()
-        {
-            throw new NotImplementedException("Cannot open mock reader without path!");
-        }
-
-        public override IBodyFrameReader OpenReader(string path)
-        {
-            reader = new BodyFrameReaderMock(path);
-            return reader;
-        }
-    }
-
-    internal class BodyFrameReaderMock : IBodyFrameReader
-    {
-        [SuppressUnmanagedCodeSecurity]
-        internal static class SafeNativeMethods
-        {
-            [DllImport("shlwapi.dll", CharSet = CharSet.Unicode)]
-            public static extern int StrCmpLogicalW(string psz1, string psz2);
-        }
-
-        public sealed class NaturalStringComparer : IComparer<string>
-        {
-            public int Compare(string a, string b)
-            {
-                return SafeNativeMethods.StrCmpLogicalW(a, b);
-            }
-        }
-
-        public List<IBody[]> frames = new List<IBody[]>();
-
-        private int frameIndex = -1;
-
-        public int BodyCount {
-            get {
-                return frames[frameIndex].Length;
-            }
-        }
-
-        public BodyFrameReaderMock(string path)
-        {
-            List<string> files = new List<string>(Directory.GetFiles(path));
-            files = files.Where(f => f.EndsWith(".json")).ToList();
-
-            files.Sort(new NaturalStringComparer());
-
-            foreach(string file in files)
-            {
-                object raw = JsonConvert.DeserializeObject(File.ReadAllText(file));
-
-                frames.Add(JsonConvert.DeserializeObject<BodyMock[]>(File.ReadAllText(file)));
-            }
-
-            if(frames.Count <= 0)
-            {
-                throw new ArgumentException("Could not read frames from path: " + path);
-            }
-        }
-
-        public override IBodyFrame AcquireLatestFrame()
-        {
-            frameIndex++;
-            frameIndex %= frames.Count;
-            return new BodyFrameMock(frames[frameIndex]);
-        }
-
-        public override void Dispose() { }
-    }
-
-    internal class BodyFrameMock : IBodyFrame
-    {
-        private readonly IBody[] bodies;
-
-        public BodyFrameMock(IBody[] bodies)
-        {
-            this.bodies = bodies;
-        }
-
-        public override void Dispose() { }
-
-        public override void GetAndRefreshBodyData(IList<IBody> bodies)
-        {
-            for(int i = 0; i < this.bodies.Length; i++)
-            {
-                bodies[i] = this.bodies[i];
-            }
-        }
-    }
-
-    public class BodyMock : IBody
-    {
-        private readonly Dictionary<Activity, DetectionResult> activities;
-        private readonly Dictionary<Appearance, DetectionResult> appearance;
-        private readonly FrameEdges clippedEdges;
-        private readonly DetectionResult engaged;
-        private readonly Dictionary<Expression, DetectionResult> expressions;
-        private readonly TrackingConfidence handLeftConfidence;
-        private readonly HandState handLeftState;
-        private readonly TrackingConfidence handRightConfidence;
-        private readonly bool isRestricted;
-        private readonly bool isTracked;
-        private readonly Dictionary<JointType, JointOrientation> jointOrientations;
-        private readonly Dictionary<JointType, Joint> joints;
-        private readonly TrackingState leanTrackingState;
-        private readonly ulong trackingId;
-
-        [JsonConstructor]
-        public BodyMock(Dictionary<Activity, DetectionResult> activities, 
-            Dictionary<Appearance, DetectionResult> appearance, 
-            FrameEdges clippedEdges, DetectionResult engaged, 
-            Dictionary<Expression, DetectionResult> expressions, 
-            TrackingConfidence handLeftConfidence, HandState handLeftState, 
-            TrackingConfidence handRightConfidence, 
-            bool isRestricted, 
-            bool isTracked, 
-            Dictionary<JointType, JointOrientation> jointOrientations, 
-            Dictionary<JointType, Joint> joints, 
-            TrackingState leanTrackingState, 
-            ulong trackingId)
-        {
-            this.activities = activities;
-            this.appearance = appearance;
-            this.clippedEdges = clippedEdges;
-            this.engaged = engaged;
-            this.expressions = expressions;
-            this.handLeftConfidence = handLeftConfidence;
-            this.handLeftState = handLeftState;
-            this.handRightConfidence = handRightConfidence;
-            this.isRestricted = isRestricted;
-            this.isTracked = isTracked;
-            this.jointOrientations = jointOrientations;
-            this.joints = joints;
-            this.leanTrackingState = leanTrackingState;
-            this.trackingId = trackingId;
-        }
-
-        //******************************************************//******************************************************//******************************************************//******************************************************
-
-        public override Dictionary<Activity, DetectionResult> Activities => activities;
-        public override Dictionary<Appearance, DetectionResult> Appearance => appearance;
-        public override FrameEdges ClippedEdges => clippedEdges;
-        public override DetectionResult Engaged => engaged;
-        public override Dictionary<Expression, DetectionResult> Expressions => expressions;
-        public override TrackingConfidence HandLeftConfidence => handLeftConfidence;
-        public override HandState HandLeftState => handLeftState;
-        public override TrackingConfidence HandRightConfidence => handRightConfidence;
-        public override bool IsRestricted => isRestricted;
-        public override bool IsTracked => isTracked;
-        public override Dictionary<JointType, JointOrientation> JointOrientations => jointOrientations;
-        public override Dictionary<JointType, Joint> Joints => joints;
-        public override TrackingState LeanTrackingState => leanTrackingState;
-        public override ulong TrackingId => trackingId;
-
-        internal override IntPtr GetIntPtr()
-        {
-            return IntPtr.Add(IntPtr.Zero, 500);
-        }
-
-        internal override void SetIntPtr(IntPtr intPtr) { }
-    }
-
+    
     public sealed partial class KinectSensor : IKinectSensor
     {
         private void Dispose(bool disposing)
@@ -799,5 +605,200 @@ namespace Windows.Kinect
             Windows_Kinect_CoordinateMapper_MapDepthFrameToCameraSpace(_pNative, depthFrameData, length, cameraSpacePoints, cameraSpacePointsSize);
             Helper.ExceptionHelper.CheckLastError();
         }
+    }
+
+
+    public abstract class IKinectSensor
+    {
+        public abstract IBodyFrameSource BodyFrameSource { get; }
+        public abstract bool IsOpen { get; }
+        public abstract void Open();
+        public abstract void Close();
+    }
+
+    public sealed partial class KinectSensorMock : IKinectSensor
+    {
+        private BodyFrameSourceMock source = new BodyFrameSourceMock();
+
+        public override IBodyFrameSource BodyFrameSource
+        {
+            get
+            {
+                return source;
+            }
+        }
+
+        public override bool IsOpen => true;
+
+        public override void Close() { }
+
+        public override void Open() { }
+    }
+
+    internal class BodyFrameSourceMock : IBodyFrameSource
+    {
+        public override int BodyCount => reader.BodyCount;
+
+        private BodyFrameReaderMock reader;
+
+        public override IBodyFrameReader OpenReader()
+        {
+            throw new NotImplementedException("Cannot open mock reader without path!");
+        }
+
+        public override IBodyFrameReader OpenReader(string path)
+        {
+            reader = new BodyFrameReaderMock(path);
+            return reader;
+        }
+    }
+
+    internal class BodyFrameReaderMock : IBodyFrameReader
+    {
+        [SuppressUnmanagedCodeSecurity]
+        internal static class SafeNativeMethods
+        {
+            [DllImport("shlwapi.dll", CharSet = CharSet.Unicode)]
+            public static extern int StrCmpLogicalW(string psz1, string psz2);
+        }
+
+        public sealed class NaturalStringComparer : IComparer<string>
+        {
+            public int Compare(string a, string b)
+            {
+                return SafeNativeMethods.StrCmpLogicalW(a, b);
+            }
+        }
+
+        public List<IBody[]> frames = new List<IBody[]>();
+
+        private int frameIndex = -1;
+
+        public int BodyCount
+        {
+            get
+            {
+                return frames[frameIndex].Length;
+            }
+        }
+
+        public BodyFrameReaderMock(string path)
+        {
+            List<string> files = new List<string>(Directory.GetFiles(path));
+            files = files.Where(f => f.EndsWith(".json")).ToList();
+
+            files.Sort(new NaturalStringComparer());
+
+            foreach (string file in files)
+            {
+                object raw = JsonConvert.DeserializeObject(File.ReadAllText(file));
+
+                frames.Add(JsonConvert.DeserializeObject<BodyMock[]>(File.ReadAllText(file)));
+            }
+
+            if (frames.Count <= 0)
+            {
+                throw new ArgumentException("Could not read frames from path: " + path);
+            }
+        }
+
+        public override IBodyFrame AcquireLatestFrame()
+        {
+            frameIndex++;
+            frameIndex %= frames.Count;
+            return new BodyFrameMock(frames[frameIndex]);
+        }
+
+        public override void Dispose() { }
+    }
+
+    internal class BodyFrameMock : IBodyFrame
+    {
+        private readonly IBody[] bodies;
+
+        public BodyFrameMock(IBody[] bodies)
+        {
+            this.bodies = bodies;
+        }
+
+        public override void Dispose() { }
+
+        public override void GetAndRefreshBodyData(IList<IBody> bodies)
+        {
+            for (int i = 0; i < this.bodies.Length; i++)
+            {
+                bodies[i] = this.bodies[i];
+            }
+        }
+    }
+
+    public class BodyMock : IBody
+    {
+        private readonly Dictionary<Activity, DetectionResult> activities;
+        private readonly Dictionary<Appearance, DetectionResult> appearance;
+        private readonly FrameEdges clippedEdges;
+        private readonly DetectionResult engaged;
+        private readonly Dictionary<Expression, DetectionResult> expressions;
+        private readonly TrackingConfidence handLeftConfidence;
+        private readonly HandState handLeftState;
+        private readonly TrackingConfidence handRightConfidence;
+        private readonly bool isRestricted;
+        private readonly bool isTracked;
+        private readonly Dictionary<JointType, JointOrientation> jointOrientations;
+        private readonly Dictionary<JointType, Joint> joints;
+        private readonly TrackingState leanTrackingState;
+        private readonly ulong trackingId;
+
+        [JsonConstructor]
+        public BodyMock(Dictionary<Activity, DetectionResult> activities,
+            Dictionary<Appearance, DetectionResult> appearance,
+            FrameEdges clippedEdges, DetectionResult engaged,
+            Dictionary<Expression, DetectionResult> expressions,
+            TrackingConfidence handLeftConfidence, HandState handLeftState,
+            TrackingConfidence handRightConfidence,
+            bool isRestricted,
+            bool isTracked,
+            Dictionary<JointType, JointOrientation> jointOrientations,
+            Dictionary<JointType, Joint> joints,
+            TrackingState leanTrackingState,
+            ulong trackingId)
+        {
+            this.activities = activities;
+            this.appearance = appearance;
+            this.clippedEdges = clippedEdges;
+            this.engaged = engaged;
+            this.expressions = expressions;
+            this.handLeftConfidence = handLeftConfidence;
+            this.handLeftState = handLeftState;
+            this.handRightConfidence = handRightConfidence;
+            this.isRestricted = isRestricted;
+            this.isTracked = isTracked;
+            this.jointOrientations = jointOrientations;
+            this.joints = joints;
+            this.leanTrackingState = leanTrackingState;
+            this.trackingId = trackingId;
+        }
+
+        public override Dictionary<Activity, DetectionResult> Activities => activities;
+        public override Dictionary<Appearance, DetectionResult> Appearance => appearance;
+        public override FrameEdges ClippedEdges => clippedEdges;
+        public override DetectionResult Engaged => engaged;
+        public override Dictionary<Expression, DetectionResult> Expressions => expressions;
+        public override TrackingConfidence HandLeftConfidence => handLeftConfidence;
+        public override HandState HandLeftState => handLeftState;
+        public override TrackingConfidence HandRightConfidence => handRightConfidence;
+        public override bool IsRestricted => isRestricted;
+        public override bool IsTracked => isTracked;
+        public override Dictionary<JointType, JointOrientation> JointOrientations => jointOrientations;
+        public override Dictionary<JointType, Joint> Joints => joints;
+        public override TrackingState LeanTrackingState => leanTrackingState;
+        public override ulong TrackingId => trackingId;
+
+        internal override IntPtr GetIntPtr()
+        {
+            return IntPtr.Add(IntPtr.Zero, 500);
+        }
+
+        internal override void SetIntPtr(IntPtr intPtr) { }
     }
 }
