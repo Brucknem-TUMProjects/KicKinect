@@ -69,6 +69,7 @@
     <Compile Include="Assets\_Scripts\Kick_Keyboard.cs" />
     <Compile Include="Assets\_Scripts\LinearBlendSkinner.cs" />
     <Compile Include="Assets\_Scripts\LinearBlendSkinningManager.cs" />
+    <Compile Include="Assets\_Scripts\Matrix3x3.cs" />
     <Compile Include="Assets\_Scripts\RecordAndReplay\DepthImageRecorder.cs" />
     <Compile Include="Assets\_Scripts\RecordAndReplay\DepthImageReplayer.cs" />
     <Compile Include="Assets\_Scripts\RecordAndReplay\MockKinectManager.cs" />

@@ -39,6 +39,7 @@ public class LinearBlendSkinner : MonoBehaviour
 
     private MeshFilter filter;
     private Mesh restPose;
+    
 
     private void Start()
     {
@@ -49,16 +50,24 @@ public class LinearBlendSkinner : MonoBehaviour
     //TODO calculate linear blend skinning based on parameters
     public void SetParameters(Kinect.IBody body)
     {
-        for (Kinect.JointType jt = Kinect.JointType.SpineBase; jt <= Kinect.JointType.ThumbRight; jt++)
-        {
-            Kinect.Joint sourceJoint = body.Joints[jt];
-            Kinect.Joint? targetJoint = null;
+        SetRoot(body.Joints[Kinect.JointType.SpineBase]);
+        //BoneWeight[] weights = restPose.boneWeights;
 
-            if (_BoneMap.ContainsKey(jt))
-            {
-                targetJoint = body.Joints[_BoneMap[jt]];
-            }
-        }
+        //for (Kinect.JointType jt = Kinect.JointType.SpineBase; jt <= Kinect.JointType.ThumbRight; jt++)
+        //{
+        //    Kinect.Joint sourceJoint = body.Joints[jt];
+        //    Kinect.Joint? targetJoint = null;
+
+        //    if (_BoneMap.ContainsKey(jt))
+        //    {
+        //        targetJoint = body.Joints[_BoneMap[jt]];
+        //    }
+        //}
+    }
+
+    private void SetRoot(Kinect.Joint rootBone)
+    {
+        transform.position = GetVector3FromJoint(rootBone);
     }
 
     //TODO calculate G(Theta, J)
@@ -67,6 +76,52 @@ public class LinearBlendSkinner : MonoBehaviour
     {
         return Matrix4x4.identity;
     }
+
+    //public Matrix4x4 GTrafo(Vector3 rotation, Vector3 joint_position)
+    //{
+    //    Matrix3x3 expomap = ExpoMap(rotation);
+    //    Matrix4x4 G = new Matrix4x4();
+    //    for (int i = 0; i < 3; i++)
+    //    {
+    //        G.SetColumn(i, new Vector4(expomap.Column(i).x, expomap.Column(i).y, expomap.Column(i).z, 0));
+    //    }
+    //    G.SetColumn(3, new Vector4(joint_position.x, joint_position.y, joint_position.z, 1));
+    //    return G;
+    //}
+    //private Matrix3x3 ExpoMap(Vector3 rotation)
+    //{
+    //    //v_rot = R*v
+    //    //where
+    //    //R = I_3 + (sin w)K + (1 - cos w)K^2
+    //    //where 
+    //    //K = 
+    //    //     0   - k_z    k_y
+    //    //   k_z       0   -k_x
+    //    // - k_y     k_x      0
+    //    //implying K*v =  k x v
+    //    //and k is the rotation axis vector (unit vector)
+    //    //and w is the rotation angle.
+    //    //k is the normalized vector of "rotation"
+    //    //w is the norm of "rotation"
+    //    Vector3 k = new Vector3(rotation.x, rotation.y, rotation.z);
+    //    k.Normalize();
+    //    float w = norm(rotation);
+
+    //    Matrix3x3 I_3 = Matrix3x3.identity;
+    //    Matrix3x3 K = new Matrix3x3(
+    //          0f,  -k.z,   k.y,
+    //         k.z,    0f,  -k.z,
+    //        -k.y,   k.x,    0f
+    //        );
+    //    Matrix3x3 K2 = K * K;
+    //    Matrix3x3 R = I_3 + (K * Mathf.Sin(w)) + (K2 * (1 - Mathf.Cos(w)));
+
+    //    return R;
+    //}
+    //private static float norm(Vector3 v)
+    //{
+    //    return Mathf.Sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+    //}
 
     //TODO calculate pose parameters
     public List<Quaternion> CalculatePoseParameters(List<Kinect.Joint> jointLocations)
@@ -83,6 +138,11 @@ public class LinearBlendSkinner : MonoBehaviour
 
     private static Vector3 GetVector3FromJoint(Kinect.Joint joint)
     {
-        return new Vector3(joint.Position.X * 10, joint.Position.Y * 10, joint.Position.Z * 10);
+        return new Vector3(joint.Position.X, joint.Position.Y, joint.Position.Z);
     }
+
+    private static readonly Dictionary<Kinect.JointType, int> joint2CharacterBoneMap = new Dictionary<Kinect.JointType, int>
+    {
+
+    };
 }
