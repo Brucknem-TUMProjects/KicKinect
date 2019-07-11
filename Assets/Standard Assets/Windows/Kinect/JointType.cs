@@ -34,5 +34,4 @@ namespace Windows.Kinect
         HandTipRight                             =23,
         ThumbRight                               =24,
     }
-
 }

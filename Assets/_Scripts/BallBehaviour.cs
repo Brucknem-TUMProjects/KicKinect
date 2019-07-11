@@ -12,4 +12,21 @@ public class BallBehaviour : MonoBehaviour
     //{
     //    rb = GetComponent<Rigidbody>();
     //}
+
+    public AudioSource audioSource;
+    public AudioClip ballHitSound;
+
+    void Start()
+    {
+        audioSource.clip = ballHitSound;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Ontrigger");
+        if(other.tag == "Player")
+        {
+            audioSource.Play();
+        }
+    }
 }

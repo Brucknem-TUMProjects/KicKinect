@@ -9,7 +9,13 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
 
     public GameObject ball;
     public GameObject ballSpawn;
-    public RectTransform goalMessage;
+
+    public Image spawnMessage;
+    public Image goalMessage;
+    public Image missMessage;
+
+    public AudioSource audioSource;
+    public AudioClip refreeWhistleSound;
 
     //// GUI Text to display the gesture messages.
     public Text GestureInfo;
@@ -17,9 +23,13 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
     // private bool to track if progress message has been displayed
     private bool progressDisplayed;
 
+    private bool showSpawnMessage = true;
+
     private void Start()
     {
-        OnSwipeLeft();
+        // Manually swipe to dismiss spawn message and start game
+        // OnSwipeLeft();
+        audioSource.clip = refreeWhistleSound;
     }
 
     public void UserDetected(uint userId, int userIndex)
@@ -131,11 +141,20 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
 
     private void SpawnBall(bool leftFoot)
     {
+        if (showSpawnMessage)
+        {
+            spawnMessage.gameObject.SetActive(false);
+            showSpawnMessage = false;
+        }
+
         goalMessage.gameObject.SetActive(false);
+        missMessage.gameObject.SetActive(false);
         
         ball.transform.position = ballSpawn.transform.position + ballSpawn.transform.up * upDelta;
         ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
         ball.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+
+        audioSource.Play();
     }
 
     private void OnDrawGizmos()

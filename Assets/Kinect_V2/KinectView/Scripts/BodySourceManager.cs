@@ -9,6 +9,8 @@ using System.Linq;
 public class BodySourceManager : MonoBehaviour 
 {
     public bool mock = false;
+    public bool record = false;
+
     private string standardDirectory;
 
     private IKinectSensor _Sensor;
@@ -62,13 +64,12 @@ public class BodySourceManager : MonoBehaviour
                 
                 frame.GetAndRefreshBodyData(_Data);
                 
-                if (!mock)
+                if (record)
                 {
                     if (HasTrackedBody(_Data))
                     {
-                        IBody[] currentBodies = (IBody[])_Data.Clone();
                         i++;
-                        File.WriteAllText(standardDirectory + "frame (" + i + ").json", JsonConvert.SerializeObject(currentBodies));
+                        File.WriteAllText(standardDirectory + "frame (" + i + ").json", JsonConvert.SerializeObject(_Data));
                     } 
                 }
 
