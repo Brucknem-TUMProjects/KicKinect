@@ -11,6 +11,8 @@ public class WeightVisualization : MonoBehaviour
     private BoneWeight[] weights;
     private Color[] colors;
 
+    public readonly BoneIndex2ColorMap boneIndex2ColorMap = new BoneIndex2ColorMap();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,32 +28,33 @@ public class WeightVisualization : MonoBehaviour
             BoneWeight weight = weights[i];
 
             Color color = new Color(0, 0, 0, 1);
-            if (boneIndex2Color.ContainsKey(weight.boneIndex0))
-            {
-                color += boneIndex2Color[weight.boneIndex0] * weight.weight0;
-            }
-            if (boneIndex2Color.ContainsKey(weight.boneIndex1))
-            {
-                color += boneIndex2Color[weight.boneIndex1] * weight.weight1;
-            }
-            if (boneIndex2Color.ContainsKey(weight.boneIndex2))
-            {
-                color += boneIndex2Color[weight.boneIndex2] * weight.weight2;
-            }
-            if (boneIndex2Color.ContainsKey(weight.boneIndex3))
-            {
-                color += boneIndex2Color[weight.boneIndex3] * weight.weight3;
-            }
+                color += boneIndex2ColorMap[weight.boneIndex0] * weight.weight0;
+                color += boneIndex2ColorMap[weight.boneIndex1] * weight.weight1;
+                color += boneIndex2ColorMap[weight.boneIndex2] * weight.weight2;
+                color += boneIndex2ColorMap[weight.boneIndex3] * weight.weight3;
 
             colors[i] = color;
         }
         GetComponent<MeshFilter>().mesh.colors = colors;
     }
 
-    // Update is called once per frame
-    void Update()
+    public class BoneIndex2ColorMap
     {
+        Dictionary<int, Color> map = new Dictionary<int, Color>();
 
+        private static readonly Color[] colors = { Color.red, Color.green, Color.yellow, Color.blue, Color.magenta, Color.white };
+        
+        public Color this[int key]
+        {
+            get
+            {
+                if (!map.ContainsKey(key))
+                {
+                    map.Add(key, colors[Random.Range(0, colors.Length)]);
+                }
+                return map[key];
+            }
+        }
     }
 
     public static readonly Dictionary<int, Color> boneIndex2Color = new Dictionary<int, Color>()

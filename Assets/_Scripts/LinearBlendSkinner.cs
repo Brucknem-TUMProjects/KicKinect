@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Kinect = Windows.Kinect;
 
 [RequireComponent(typeof(MeshFilter))]
 public class LinearBlendSkinner : MonoBehaviour
 {
+    public bool completeRendering = true;
+
     [Range(0, (int)Kinect.JointType.ThumbRight)]
     public int currentBone = 0;
 
     [Range(0, (int)Kinect.JointType.ThumbRight)]
     public int followingBones = 0;
+
+    public Toggle onlyTranslation;
+    public Toggle firstRotation;
 
     //private Dictionary<Kinect.JointType, Kinect.JointType[]> _RealBoneMap = new Dictionary<Kinect.JointType, Kinect.JointType[]>()
     //{
@@ -49,7 +55,7 @@ public class LinearBlendSkinner : MonoBehaviour
     //    //{ Kinect.JointType.HandRight , new Kinect.JointType[]{ Kinect.JointType.HandTipRight, Kinect.JointType.ThumbRight } },
     //};
 
-    private Dictionary<Kinect.JointType, Kinect.JointType> _KinectBoneMap = new Dictionary<Kinect.JointType, Kinect.JointType>()
+    public static readonly Dictionary<Kinect.JointType, Kinect.JointType> _KinectBoneMap = new Dictionary<Kinect.JointType, Kinect.JointType>()
     {
         { Kinect.JointType.FootLeft, Kinect.JointType.AnkleLeft },
         { Kinect.JointType.AnkleLeft, Kinect.JointType.KneeLeft },
@@ -283,6 +289,7 @@ public class LinearBlendSkinner : MonoBehaviour
 
         Kinect.JointType selectedJoint = boneIndex2JointType[currentBone];
         //foreach (Kinect.JointType selectedJoint in boneIndex2JointType.Values)
+        if(!completeRendering)
         {
             Kinect.JointType n = _KinectBoneMap[selectedJoint];
             //Debug.DrawRay(currentPoseGameObject[c], currentPoseGameObject[c], Color.red);
@@ -316,19 +323,26 @@ public class LinearBlendSkinner : MonoBehaviour
 
             foreach (Kinect.JointType joint in contributingJoints.Keys)
             {
-                if ((int)joint < currentBone || (int)joint >= (int)Kinect.JointType.ThumbRight || (int)joint > currentBone + followingBones)
+                if (!completeRendering && ((int)joint < currentBone || (int)joint >= (int)Kinect.JointType.ThumbRight || (int)joint > currentBone + followingBones))
                 {
                     continue;
                 }
 
-                Matrix4x4 rotation = Matrix4x4.identity;// Matrix4x4.Rotate(Quaternion.FromToRotation(restPoseOrientations[joint], jointToOrientationsMap[joint]));
+                Matrix4x4 rotation = Matrix4x4.identity;
+                if (!onlyTranslation.isOn)
+                {
+                    rotation = Matrix4x4.Rotate(Quaternion.FromToRotation(restPoseOrientations[joint], jointToOrientationsMap[joint]));
+                }
                 Matrix4x4 translation = Matrix4x4.Translate(jointToPositionsMap[joint]);
 
-                skinnedVertices[i] += (Vector3)(contributingJoints[joint] * (translation * rotation * restPoseVertices[i]));
-                //Debug.Log(skinnedVertices[i]);
-                //skinnedVertices[i] = FlipXZ(skinnedVertices[i]);
-                //Debug.Log(skinnedVertices[i]);
-
+                if (firstRotation.isOn)
+                {
+                    skinnedVertices[i] += (Vector3)(contributingJoints[joint] * (rotation * translation * restPoseVertices[i]));
+                }
+                else
+                {
+                    skinnedVertices[i] += (Vector3)(contributingJoints[joint] * (translation * rotation * restPoseVertices[i]));
+                }
             }
         }
 

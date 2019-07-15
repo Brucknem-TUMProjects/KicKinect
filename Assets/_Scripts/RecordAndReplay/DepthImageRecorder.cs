@@ -24,6 +24,9 @@ public class DepthImageRecorder : MonoBehaviour
 
     private List<Texture2D> frames = new List<Texture2D>();
 
+    private const int DepthImageHeight = 480;
+    private const int DepthImageWidth = 640;
+
     void Start()
     {
         standardDirectory = Application.dataPath + "/_Recordings/" + DateTime.Now.ToString("d-MMM-yyyy-HH-mm-ss");
@@ -35,20 +38,20 @@ public class DepthImageRecorder : MonoBehaviour
         float rectWidth = cameraRect.width;
 
         if (rectWidth > rectHeight)
-            rectWidth = rectHeight * KinectWrapper.Constants.DepthImageWidth / KinectWrapper.Constants.DepthImageHeight;
+            rectWidth = rectHeight * DepthImageWidth / DepthImageHeight;
         else
-            rectHeight = rectWidth * KinectWrapper.Constants.DepthImageHeight / KinectWrapper.Constants.DepthImageWidth;
+            rectHeight = rectWidth * DepthImageHeight / DepthImageWidth;
 
         foregroundOfs = new Vector2((cameraRect.width - rectWidth) / 2, (cameraRect.height - rectHeight) / 2);
         foregroundRect = new Rect(foregroundOfs.x, cameraRect.height - foregroundOfs.y, rectWidth, -rectHeight);
 
         // create joint colliders
-        int numColliders = (int)KinectWrapper.NuiSkeletonPositionIndex.Count;
+        int numColliders = (int)KinectInterop.JointType.Count;
         jointColliders = new GameObject[numColliders];
 
         for (int i = 0; i < numColliders; i++)
         {
-            string sColObjectName = ((KinectWrapper.NuiSkeletonPositionIndex)i).ToString() + "Collider";
+            string sColObjectName = ((KinectInterop.JointType)i).ToString() + "Collider";
             jointColliders[i] = new GameObject(sColObjectName);
             jointColliders[i].transform.parent = transform;
 
@@ -67,7 +70,7 @@ public class DepthImageRecorder : MonoBehaviour
         // get the users texture
         if (manager && manager.IsInitialized())
         {
-            foregroundTex = manager.GetUsersLblTex();
+            foregroundTex = manager.GetUsersLblTex2D();
         }
 
         if (manager.IsUserDetected())

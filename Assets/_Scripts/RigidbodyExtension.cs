@@ -33,6 +33,8 @@ public class RigidbodyExtension : MonoBehaviour
         Velocities = new List<float>();
         rb = GetComponent<Rigidbody>();
         lastPosition = transform.position;
+
+        tag = "Player";
     }
 
     private void Update()
@@ -50,13 +52,16 @@ public class RigidbodyExtension : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        float m1 = rb.mass;
-        Vector3 v1 = Velocity;
-        float m2 = collision.rigidbody.mass;
-        Vector3 v2 = collision.rigidbody.velocity;
+        if (collision.gameObject.tag == "SoccerBall")
+        {
+            float m1 = rb.mass;
+            Vector3 v1 = Velocity;
+            float m2 = collision.rigidbody.mass;
+            Vector3 v2 = collision.rigidbody.velocity;
 
-        Vector3 u2 = (2 * m1 * v1 + (m2 - m1) * v2) / (m1 + m2);
-        collision.rigidbody.velocity = u2;
+            Vector3 u2 = (2 * m1 * v1 + (m2 - m1) * v2) / (m1 + m2);
+            collision.rigidbody.velocity = u2;
+        }
     }
 
     private void OnApplicationQuit()
@@ -66,4 +71,6 @@ public class RigidbodyExtension : MonoBehaviour
             VelocitiesSaver.Save(Velocities);
         }
     }
+
+
 }

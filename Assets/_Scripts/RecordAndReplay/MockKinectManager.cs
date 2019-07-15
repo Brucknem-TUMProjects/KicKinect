@@ -58,7 +58,7 @@ public class MockKinectManager : KinectManager
 
 
     // returns the depth image/users histogram texture,if ComputeUserMap is true
-    public override Texture2D GetUsersLblTex()
+    public override Texture2D GetUsersLblTex2D()
     {
         currentFrame++;
         currentFrame %= frames.Count;

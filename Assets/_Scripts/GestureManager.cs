@@ -7,8 +7,9 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
 {
     private static readonly float upDelta = 0.5f;
 
-    public GameObject ball;
+    public BallBehaviour ball;
     public GameObject ballSpawn;
+    public GameObject player;
 
     public Image spawnMessage;
     public Image goalMessage;
@@ -32,13 +33,16 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
         audioSource.clip = refreeWhistleSound;
     }
 
-    public void UserDetected(uint userId, int userIndex)
+    public void UserDetected(long userId, int userIndex)
     {
         // as an example - detect these user specific gestures
         KinectManager manager = KinectManager.Instance;
 
-        manager.DetectGesture(userId, KinectGestures.Gestures.Jump);
-        manager.DetectGesture(userId, KinectGestures.Gestures.Squat);
+        ////manager.DetectGesture(userId, KinectGestures.Gestures.Jump);
+        //manager.DetectGesture(userId, KinectGestures.Gestures.Squat);
+
+        manager.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);
+        manager.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
 
         //		manager.DetectGesture(userId, KinectGestures.Gestures.Push);
         //		manager.DetectGesture(userId, KinectGestures.Gestures.Pull);
@@ -52,7 +56,7 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
         }
     }
 
-    public void UserLost(uint userId, int userIndex)
+    public void UserLost(long userId, int userIndex)
     {
         if (GestureInfo != null)
         {
@@ -60,11 +64,11 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
         }
     }
 
-    public void GestureInProgress(uint userId, int userIndex, KinectGestures.Gestures gesture,
-                                  float progress, KinectWrapper.NuiSkeletonPositionIndex joint, Vector3 screenPos)
+    public void GestureInProgress(long userId, int userIndex, KinectGestures.Gestures gesture,
+                                  float progress, KinectInterop.JointType joint, Vector3 screenPos)
     {
         GestureInfo.text = string.Format("{0} Progress: {1:F1}%", gesture, (progress * 100));
-        if (gesture == KinectGestures.Gestures.Click && progress > 0.3f)
+        if (gesture == KinectGestures.Gestures.RaiseRightHand && progress > 0.3f)
         {
             string sGestureText = string.Format("{0} {1:F1}% complete", gesture, progress * 100);
             if (GestureInfo != null)
@@ -90,11 +94,11 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
         }
     }
 
-    public bool GestureCompleted(uint userId, int userIndex, KinectGestures.Gestures gesture,
-                                  KinectWrapper.NuiSkeletonPositionIndex joint, Vector3 screenPos)
+    public bool GestureCompleted(long userId, int userIndex, KinectGestures.Gestures gesture,
+                                  KinectInterop.JointType joint, Vector3 screenPos)
     {
         string sGestureText = gesture + " detected";
-        if (gesture == KinectGestures.Gestures.Click)
+        if (gesture == KinectGestures.Gestures.RaiseRightHand)
             sGestureText += string.Format(" at ({0:F1}, {1:F1})", screenPos.x, screenPos.y);
 
         if (GestureInfo != null)
@@ -114,8 +118,8 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
         return true;
     }
 
-    public bool GestureCancelled(uint userId, int userIndex, KinectGestures.Gestures gesture,
-                                  KinectWrapper.NuiSkeletonPositionIndex joint)
+    public bool GestureCancelled(long userId, int userIndex, KinectGestures.Gestures gesture,
+                                  KinectInterop.JointType joint)
     {
         if (progressDisplayed)
         {
@@ -131,30 +135,29 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
 
     public void OnSwipeLeft()
     {
-        SpawnBall(true);
+        SpawnBall();
     }
 
     public void OnSwipeRight()
     {
-        SpawnBall(false);
+        ResetPlayerPosition();
     }
 
-    private void SpawnBall(bool leftFoot)
+    private void ResetPlayerPosition()
+    {
+        player.transform.position = Vector3.zero;
+    }
+
+    private void SpawnBall()
     {
         if (showSpawnMessage)
         {
             spawnMessage.gameObject.SetActive(false);
             showSpawnMessage = false;
         }
-
-        goalMessage.gameObject.SetActive(false);
-        missMessage.gameObject.SetActive(false);
         
         ball.transform.position = ballSpawn.transform.position + ballSpawn.transform.up * upDelta;
-        ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        ball.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-
-        audioSource.Play();
+        ball.Respawn();
     }
 
     private void OnDrawGizmos()
