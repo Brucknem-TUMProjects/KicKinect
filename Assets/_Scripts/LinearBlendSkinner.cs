@@ -12,42 +12,42 @@ public class LinearBlendSkinner : MonoBehaviour
     [Range(0, (int)Kinect.JointType.ThumbRight)]
     public int followingBones = 0;
 
-    private Dictionary<Kinect.JointType, Kinect.JointType[]> _RealBoneMap = new Dictionary<Kinect.JointType, Kinect.JointType[]>()
-    {
-        { Kinect.JointType.HipLeft , new Kinect.JointType[]{ Kinect.JointType.KneeLeft } },
-        { Kinect.JointType.KneeLeft , new Kinect.JointType[]{ Kinect.JointType.AnkleLeft } },
-        { Kinect.JointType.AnkleLeft , new Kinect.JointType[]{ Kinect.JointType.FootLeft } },
+    //private Dictionary<Kinect.JointType, Kinect.JointType[]> _RealBoneMap = new Dictionary<Kinect.JointType, Kinect.JointType[]>()
+    //{
+    //    { Kinect.JointType.HipLeft , new Kinect.JointType[]{ Kinect.JointType.KneeLeft } },
+    //    { Kinect.JointType.KneeLeft , new Kinect.JointType[]{ Kinect.JointType.AnkleLeft } },
+    //    { Kinect.JointType.AnkleLeft , new Kinect.JointType[]{ Kinect.JointType.FootLeft } },
 
-        { Kinect.JointType.HipRight , new Kinect.JointType[]{ Kinect.JointType.KneeRight } },
-        { Kinect.JointType.KneeRight , new Kinect.JointType[]{ Kinect.JointType.AnkleRight } },
-        { Kinect.JointType.AnkleRight , new Kinect.JointType[]{ Kinect.JointType.FootRight } },
+    //    { Kinect.JointType.HipRight , new Kinect.JointType[]{ Kinect.JointType.KneeRight } },
+    //    { Kinect.JointType.KneeRight , new Kinect.JointType[]{ Kinect.JointType.AnkleRight } },
+    //    { Kinect.JointType.AnkleRight , new Kinect.JointType[]{ Kinect.JointType.FootRight } },
 
-        { Kinect.JointType.SpineBase , new Kinect.JointType[]{ Kinect.JointType.SpineMid, Kinect.JointType.HipLeft, Kinect.JointType.HipRight } },
-        { Kinect.JointType.SpineMid , new Kinect.JointType[]{ Kinect.JointType.SpineShoulder } },
-        { Kinect.JointType.SpineShoulder , new Kinect.JointType[]{ Kinect.JointType.ShoulderLeft, Kinect.JointType.ShoulderRight, Kinect.JointType.Neck } },
-        { Kinect.JointType.Neck , new Kinect.JointType[]{ Kinect.JointType.Head } },
-        { Kinect.JointType.Head , new Kinect.JointType[]{ Kinect.JointType.Head } },
+    //    { Kinect.JointType.SpineBase , new Kinect.JointType[]{ Kinect.JointType.SpineMid, Kinect.JointType.HipLeft, Kinect.JointType.HipRight } },
+    //    { Kinect.JointType.SpineMid , new Kinect.JointType[]{ Kinect.JointType.SpineShoulder } },
+    //    { Kinect.JointType.SpineShoulder , new Kinect.JointType[]{ Kinect.JointType.ShoulderLeft, Kinect.JointType.ShoulderRight, Kinect.JointType.Neck } },
+    //    { Kinect.JointType.Neck , new Kinect.JointType[]{ Kinect.JointType.Head } },
+    //    { Kinect.JointType.Head , new Kinect.JointType[]{ Kinect.JointType.Head } },
 
-        { Kinect.JointType.ShoulderLeft , new Kinect.JointType[]{ Kinect.JointType.ElbowLeft } },
-        { Kinect.JointType.ElbowLeft , new Kinect.JointType[]{ Kinect.JointType.WristLeft } },
-        { Kinect.JointType.WristLeft , new Kinect.JointType[]{ Kinect.JointType.HandLeft } },
-        { Kinect.JointType.HandLeft , new Kinect.JointType[]{ Kinect.JointType.HandTipLeft, Kinect.JointType.ThumbLeft } },
+    //    { Kinect.JointType.ShoulderLeft , new Kinect.JointType[]{ Kinect.JointType.ElbowLeft } },
+    //    { Kinect.JointType.ElbowLeft , new Kinect.JointType[]{ Kinect.JointType.WristLeft } },
+    //    { Kinect.JointType.WristLeft , new Kinect.JointType[]{ Kinect.JointType.HandLeft } },
+    //    { Kinect.JointType.HandLeft , new Kinect.JointType[]{ Kinect.JointType.HandTipLeft, Kinect.JointType.ThumbLeft } },
 
-        { Kinect.JointType.ShoulderRight , new Kinect.JointType[]{ Kinect.JointType.ElbowRight } },
-        { Kinect.JointType.ElbowRight , new Kinect.JointType[]{ Kinect.JointType.WristRight } },
-        { Kinect.JointType.WristRight , new Kinect.JointType[]{ Kinect.JointType.HandRight } },
-        { Kinect.JointType.HandRight , new Kinect.JointType[]{ Kinect.JointType.HandTipRight, Kinect.JointType.ThumbRight } },
+    //    { Kinect.JointType.ShoulderRight , new Kinect.JointType[]{ Kinect.JointType.ElbowRight } },
+    //    { Kinect.JointType.ElbowRight , new Kinect.JointType[]{ Kinect.JointType.WristRight } },
+    //    { Kinect.JointType.WristRight , new Kinect.JointType[]{ Kinect.JointType.HandRight } },
+    //    { Kinect.JointType.HandRight , new Kinect.JointType[]{ Kinect.JointType.HandTipRight, Kinect.JointType.ThumbRight } },
 
-        //{ Kinect.JointType.ShoulderLeft , new Kinect.JointType[]{ Kinect.JointType.ElbowLeft } },
-        //{ Kinect.JointType.ElbowLeft , new Kinect.JointType[]{ Kinect.JointType.WristLeft } },
-        //{ Kinect.JointType.WristLeft , new Kinect.JointType[]{ Kinect.JointType.HandLeft } },
-        //{ Kinect.JointType.HandLeft , new Kinect.JointType[]{ Kinect.JointType.HandTipLeft, Kinect.JointType.ThumbLeft } },
+    //    //{ Kinect.JointType.ShoulderLeft , new Kinect.JointType[]{ Kinect.JointType.ElbowLeft } },
+    //    //{ Kinect.JointType.ElbowLeft , new Kinect.JointType[]{ Kinect.JointType.WristLeft } },
+    //    //{ Kinect.JointType.WristLeft , new Kinect.JointType[]{ Kinect.JointType.HandLeft } },
+    //    //{ Kinect.JointType.HandLeft , new Kinect.JointType[]{ Kinect.JointType.HandTipLeft, Kinect.JointType.ThumbLeft } },
 
-        //{ Kinect.JointType.ShoulderRight , new Kinect.JointType[]{ Kinect.JointType.ElbowRight } },
-        //{ Kinect.JointType.ElbowRight , new Kinect.JointType[]{ Kinect.JointType.WristRight } },
-        //{ Kinect.JointType.WristRight , new Kinect.JointType[]{ Kinect.JointType.HandRight } },
-        //{ Kinect.JointType.HandRight , new Kinect.JointType[]{ Kinect.JointType.HandTipRight, Kinect.JointType.ThumbRight } },
-    };
+    //    //{ Kinect.JointType.ShoulderRight , new Kinect.JointType[]{ Kinect.JointType.ElbowRight } },
+    //    //{ Kinect.JointType.ElbowRight , new Kinect.JointType[]{ Kinect.JointType.WristRight } },
+    //    //{ Kinect.JointType.WristRight , new Kinect.JointType[]{ Kinect.JointType.HandRight } },
+    //    //{ Kinect.JointType.HandRight , new Kinect.JointType[]{ Kinect.JointType.HandTipRight, Kinect.JointType.ThumbRight } },
+    //};
 
     private Dictionary<Kinect.JointType, Kinect.JointType> _KinectBoneMap = new Dictionary<Kinect.JointType, Kinect.JointType>()
     {
@@ -79,45 +79,81 @@ public class LinearBlendSkinner : MonoBehaviour
         { Kinect.JointType.SpineMid, Kinect.JointType.SpineShoulder },
         { Kinect.JointType.SpineShoulder, Kinect.JointType.Neck },
         { Kinect.JointType.Neck, Kinect.JointType.Head },
+        { Kinect.JointType.Head, Kinect.JointType.Head },
     };
 
     /// <summary>
     /// A mapping between the rigged mesh joint indices and the Kinect joint types.
     /// </summary>
-    public static readonly Dictionary<int, KeyValuePair<Kinect.JointType, Kinect.JointType>> boneIndex2JointType = new Dictionary<int, KeyValuePair<Kinect.JointType, Kinect.JointType>>
+    //public static readonly Dictionary<int, KeyValuePair<Kinect.JointType, Kinect.JointType>> boneIndex2JointType = new Dictionary<int, KeyValuePair<Kinect.JointType, Kinect.JointType>>
+    //{
+    //    {0, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.SpineBase,Kinect.JointType.SpineMid )},
+    //    {1, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.SpineMid,Kinect.JointType.SpineShoulder )},
+
+    //    //{2, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.SpineShoulder ,Kinect.JointType.Neck )},
+
+    //    {2, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.SpineShoulder ,Kinect.JointType.ShoulderRight )},
+    //    {3, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.ShoulderRight ,Kinect.JointType.ElbowRight)},
+    //    {4, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.ElbowRight ,Kinect.JointType.WristRight )},
+    //    {5, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.WristRight ,Kinect.JointType.HandRight )},
+    //    {6, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.HandRight ,Kinect.JointType.HandTipRight )},
+    //    {7, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.HandRight ,Kinect.JointType.ThumbRight )},
+
+    //    {8, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.SpineShoulder , Kinect.JointType.ShoulderLeft)},
+    //    {9, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.ShoulderLeft , Kinect.JointType.ElbowLeft )},
+    //    {10,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.ElbowLeft , Kinect.JointType.WristLeft )},
+    //    {11,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.WristLeft , Kinect.JointType.HandLeft)},
+    //    {12,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.HandLeft , Kinect.JointType.HandTipLeft)},
+    //    {13,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.HandLeft , Kinect.JointType.ThumbLeft  )},
+
+    //    {14,new KeyValuePair<Kinect.JointType, Kinect.JointType>( Kinect.JointType.SpineShoulder,Kinect.JointType.Neck )},
+    //    {15,new KeyValuePair<Kinect.JointType, Kinect.JointType>( Kinect.JointType.Neck,Kinect.JointType.Head )},
+    //    {16,new KeyValuePair<Kinect.JointType, Kinect.JointType>( Kinect.JointType.Head,Kinect.JointType.Head )},
+
+    //    {17,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.HipLeft , Kinect.JointType.KneeLeft)},
+    //    {18,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.KneeLeft , Kinect.JointType.AnkleLeft)},
+    //    {19,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.AnkleLeft , Kinect.JointType.FootLeft)},
+    //    {20,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.SpineBase , Kinect.JointType.HipLeft)},
+
+    //    {21,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.HipRight , Kinect.JointType.KneeRight)},
+    //    {22,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.KneeRight , Kinect.JointType.AnkleRight)},
+    //    {23,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.AnkleRight , Kinect.JointType.FootRight )},
+    //    {24,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.SpineBase , Kinect.JointType.HipRight)},
+    //};
+
+    public static readonly Dictionary<int, Kinect.JointType> boneIndex2JointType = new Dictionary<int, Kinect.JointType>
     {
-        {0, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.SpineBase,Kinect.JointType.SpineMid )},
-        {1, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.SpineMid,Kinect.JointType.SpineShoulder )},
+        {0,  Kinect.JointType.SpineBase },
+        {1,  Kinect.JointType.SpineMid },
 
-        //{2, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.SpineShoulder ,Kinect.JointType.Neck )},
+        {2, Kinect.JointType.ShoulderRight },
+        {3, Kinect.JointType.ElbowRight },
+        {4, Kinect.JointType.WristRight },
+        {5, Kinect.JointType.HandRight },
+        {6, Kinect.JointType.HandTipRight },
+        {7, Kinect.JointType.ThumbRight },
 
-        {2, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.SpineShoulder ,Kinect.JointType.ShoulderRight )},
-        {3, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.ShoulderRight ,Kinect.JointType.ElbowRight)},
-        {4, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.ElbowRight ,Kinect.JointType.WristRight )},
-        {5, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.WristRight ,Kinect.JointType.HandRight )},
-        {6, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.HandRight ,Kinect.JointType.HandTipRight )},
-        {7, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.HandRight ,Kinect.JointType.ThumbRight )},
+        {8,   Kinect.JointType.ShoulderLeft },
+        {9,   Kinect.JointType.ElbowLeft },
+        {10,  Kinect.JointType.WristLeft },
+        {11,  Kinect.JointType.HandLeft },
+        {12,  Kinect.JointType.HandTipLeft },
+        {13,  Kinect.JointType.ThumbLeft },
 
-        {8, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.SpineShoulder , Kinect.JointType.ShoulderLeft)},
-        {9, new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.ShoulderLeft , Kinect.JointType.ElbowLeft )},
-        {10,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.ElbowLeft , Kinect.JointType.WristLeft )},
-        {11,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.WristLeft , Kinect.JointType.HandLeft)},
-        {12,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.HandLeft , Kinect.JointType.HandTipLeft)},
-        {13,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.HandLeft , Kinect.JointType.ThumbLeft  )},
+        {14, Kinect.JointType.SpineShoulder },
+        {15, Kinect.JointType.Neck },
+        {16, Kinect.JointType.Head },
 
-        {14,new KeyValuePair<Kinect.JointType, Kinect.JointType>( Kinect.JointType.SpineShoulder,Kinect.JointType.Neck )},
-        {15,new KeyValuePair<Kinect.JointType, Kinect.JointType>( Kinect.JointType.Neck,Kinect.JointType.Head )},
-        {16,new KeyValuePair<Kinect.JointType, Kinect.JointType>( Kinect.JointType.Head,Kinect.JointType.Head )},
+        {17, Kinect.JointType.KneeLeft },
+        {18, Kinect.JointType.AnkleLeft },
+        {19, Kinect.JointType.FootLeft },
+        {20, Kinect.JointType.HipLeft },
 
-        {17,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.HipLeft , Kinect.JointType.KneeLeft)},
-        {18,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.KneeLeft , Kinect.JointType.AnkleLeft)},
-        {19,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.AnkleLeft , Kinect.JointType.FootLeft)},
-        {20,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.SpineBase , Kinect.JointType.HipLeft)},
+        {21, Kinect.JointType.KneeRight },
+        {22, Kinect.JointType.AnkleRight },
+        {23, Kinect.JointType.FootRight },
+        {24, Kinect.JointType.HipRight },
 
-        {21,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.HipRight , Kinect.JointType.KneeRight)},
-        {22,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.KneeRight , Kinect.JointType.AnkleRight)},
-        {23,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.AnkleRight , Kinect.JointType.FootRight )},
-        {24,new KeyValuePair<Kinect.JointType, Kinect.JointType>(Kinect.JointType.SpineBase , Kinect.JointType.HipRight)},
     };
 
     /// <summary>
@@ -144,37 +180,17 @@ public class LinearBlendSkinner : MonoBehaviour
     /// The skinned mesh.
     /// </summary>
     private Mesh mesh;
-    
-    private Dictionary<Kinect.JointType, GameObject> bonePositions;
 
-    public GameObject SpineBase;
-    public GameObject SpineMid;
-    public GameObject Neck;
-    public GameObject Head;
-    public GameObject ShoulderLeft;
-    public GameObject ElbowLeft;
-    public GameObject WristLeft;
-    public GameObject HandLeft;
-    public GameObject ShoulderRight;
-    public GameObject ElbowRight;
-    public GameObject WristRight;
-    public GameObject HandRight;
-    public GameObject HipLeft;
-    public GameObject KneeLeft;
-    public GameObject AnkleLeft;
-    public GameObject FootLeft;
-    public GameObject HipRight;
-    public GameObject KneeRight;
-    public GameObject AnkleRight;
-    public GameObject FootRight;
-    public GameObject SpineShoulder;
-    public GameObject HandTipLeft;
-    public GameObject ThumbLeft;
-    public GameObject HandTipRight;
-    public GameObject ThumbRight;
+    private Dictionary<Kinect.JointType, GameObject> restPoseGameObjects;
+    private Dictionary<Kinect.JointType, GameObject> currentPoseGameObjects;
 
     private Dictionary<Kinect.JointType, Vector3> restPosePositions = new Dictionary<Kinect.JointType, Vector3>();
-    private Dictionary<KeyValuePair<Kinect.JointType, Kinect.JointType>, Vector3> restPoseOrientations = new Dictionary<KeyValuePair<Kinect.JointType, Kinect.JointType>, Vector3>();
+    private Dictionary<Kinect.JointType, Vector3> restPoseOrientations = new Dictionary<Kinect.JointType, Vector3>();
+
+    private Dictionary<Kinect.JointType, Kinect.Vector4> jointToKinectVector4Map;
+    private Dictionary<Kinect.JointType, Quaternion> jointToRotationsMap;
+    private Dictionary<Kinect.JointType, Vector3> jointToPositionsMap;
+    private Dictionary<Kinect.JointType, Vector3> jointToOrientationsMap;
 
     // Start is called before the first frame update
     void Start()
@@ -185,76 +201,59 @@ public class LinearBlendSkinner : MonoBehaviour
         restPose = mesh;
         weights = restPose.boneWeights;
         restPoseVertices = restPose.vertices;
-        SetBonePositions();
     }
 
     private void SetRestPoseOrientations()
     {
-        foreach (KeyValuePair<Kinect.JointType, Kinect.JointType[]> pair in _RealBoneMap)
+        foreach (KeyValuePair<Kinect.JointType, Vector3> joint in restPosePositions)
         {
-            foreach (Kinect.JointType child in pair.Value)
-            {
-                Vector3 orientation = restPosePositions[child] - restPosePositions[pair.Key];
-                restPoseOrientations.Add(new KeyValuePair<Kinect.JointType, Kinect.JointType>(pair.Key, child), orientation);
-            }
+            Kinect.JointType child = _KinectBoneMap[joint.Key];
+            Vector3 orientation = restPosePositions[child] - joint.Value;
+            restPoseOrientations.Add(joint.Key, orientation);
         }
         Debug.Log(restPoseOrientations.Count);
     }
 
     private void SetRestPoseValues()
     {
-        restPosePositions.Add(Kinect.JointType.SpineBase,       SpineBase    .transform.position  );
-        restPosePositions.Add(Kinect.JointType.SpineMid        ,SpineMid     .transform.position  );
-        restPosePositions.Add(Kinect.JointType.Neck            ,Neck         .transform.position  );
-        restPosePositions.Add(Kinect.JointType.Head            ,Head         .transform.position  );
-        restPosePositions.Add(Kinect.JointType.ShoulderLeft    ,ShoulderLeft .transform.position  );
-        restPosePositions.Add(Kinect.JointType.ElbowLeft       ,ElbowLeft    .transform.position  );
-        restPosePositions.Add(Kinect.JointType.WristLeft       ,WristLeft    .transform.position  );
-        restPosePositions.Add(Kinect.JointType.HandLeft        ,HandLeft     .transform.position  );
-        restPosePositions.Add(Kinect.JointType.ShoulderRight   ,ShoulderRight.transform.position  );
-        restPosePositions.Add(Kinect.JointType.ElbowRight      ,ElbowRight   .transform.position  );
-        restPosePositions.Add(Kinect.JointType.WristRight      ,WristRight   .transform.position  );
-        restPosePositions.Add(Kinect.JointType.HandRight       ,HandRight    .transform.position  );
-        restPosePositions.Add(Kinect.JointType.HipLeft         ,HipLeft      .transform.position  );
-        restPosePositions.Add(Kinect.JointType.KneeLeft        ,KneeLeft     .transform.position  );
-        restPosePositions.Add(Kinect.JointType.AnkleLeft       ,AnkleLeft    .transform.position  );
-        restPosePositions.Add(Kinect.JointType.FootLeft        ,FootLeft     .transform.position  );
-        restPosePositions.Add(Kinect.JointType.HipRight        ,HipRight     .transform.position  );
-        restPosePositions.Add(Kinect.JointType.KneeRight       ,KneeRight    .transform.position  );
-        restPosePositions.Add(Kinect.JointType.AnkleRight      ,AnkleRight   .transform.position  );
-        restPosePositions.Add(Kinect.JointType.FootRight       ,FootRight    .transform.position  );
-        restPosePositions.Add(Kinect.JointType.SpineShoulder   ,SpineShoulder.transform.position  );
-        restPosePositions.Add(Kinect.JointType.HandTipLeft     ,HandTipLeft  .transform.position  );
-        restPosePositions.Add(Kinect.JointType.ThumbLeft       ,ThumbLeft    .transform.position  );
-        restPosePositions.Add(Kinect.JointType.HandTipRight    ,HandTipRight .transform.position  );
-        restPosePositions.Add(Kinect.JointType.ThumbRight      ,ThumbRight   .transform.position  );
-        SetRestPoseOrientations();
-        RenderRestPosePositions();
-    }
+        restPoseGameObjects = new Dictionary<Kinect.JointType, GameObject>();
+        currentPoseGameObjects = new Dictionary<Kinect.JointType, GameObject>();
+        restPosePositions = new Dictionary<Kinect.JointType, Vector3>();
 
-    private void RenderRestPosePositions()
-    {
-        foreach(KeyValuePair<Kinect.JointType, Vector3> pair in restPosePositions)
-        {
-            GameObject prim = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            prim.transform.position = pair.Value;
-            prim.name = pair.Key.ToString();
-            prim.transform.localScale = Vector3.one * 0.05f;
-        }
-    }
-
-    private void SetBonePositions()
-    {
-        bonePositions = new Dictionary<Kinect.JointType, GameObject>();
-
+        Transform[] bones = transform.parent.GetComponentsInChildren<Transform>();
         for (int i = 0; i <= (int)Kinect.JointType.ThumbRight; i++)
         {
-            bonePositions[(Kinect.JointType)i] = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            bonePositions[(Kinect.JointType)i].transform.localScale = Vector3.one * 0.05f;
+            Kinect.JointType joint = (Kinect.JointType)i;
+            string s = joint.ToString();
+            bool found = false;
+            foreach (Transform bone in bones)
+            {
+                if (bone.name.Equals(s))
+                {
+                    GameObject o = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+                    o.transform.localScale = Vector3.one * 0.05f;
+                    GameObject p = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+                    p.transform.localScale = Vector3.one * 0.05f;
+                    restPoseGameObjects.Add(joint, p);
+                    currentPoseGameObjects.Add(joint, o);
+                    restPosePositions.Add(joint, bone.gameObject.transform.position);
+                    found = true;
+                    break;
+                }
+            }
 
-            //restPoseBonePositions[]
+            if (!found)
+            {
+                throw new KeyNotFoundException("Bone: " + s + " not found");
+            }
+            else
+            {
+                Debug.Log("Bone: " + s + " found");
+            }
         }
+        SetRestPoseOrientations();
     }
+
 
     /// <summary>
     /// Calculates the linear blend skinning based on the given Kinect body data.
@@ -265,29 +264,49 @@ public class LinearBlendSkinner : MonoBehaviour
         Vector3 root = SetRoot(body.Joints[Kinect.JointType.SpineBase]);
         //Debug.DrawRay(root, Vector3.up * 10000, Color.green);
 
-        foreach(KeyValuePair<Kinect.JointType, GameObject> bonePosition in bonePositions)
+        foreach (KeyValuePair<Kinect.JointType, GameObject> currentPoseGameObject in currentPoseGameObjects)
         {
-            bonePosition.Value.SetActive(false);
+            currentPoseGameObject.Value.SetActive(false);
+        }
+        foreach (KeyValuePair<Kinect.JointType, GameObject> currentPoseGameObject in restPoseGameObjects)
+        {
+            currentPoseGameObject.Value.SetActive(false);
         }
 
         Vector3[] skinnedVertices = new Vector3[restPoseVertices.Length];
-        Dictionary<KeyValuePair<Kinect.JointType, Kinect.JointType>, float> contributingJoints;
-        Dictionary<Kinect.JointType, Kinect.Vector4> jointToKinectVector4Map = MapJointsToKinectVector4(body);
-        Dictionary<Kinect.JointType, Quaternion> jointToRotationsMap = MapJointsToRotations(body);
-        Dictionary<Kinect.JointType, Vector3> jointToPositionsMap = MapJointsToPositions(body);
+        Dictionary<Kinect.JointType, float> contributingJoints;
 
-        KeyValuePair<Kinect.JointType, Kinect.JointType> pair = boneIndex2JointType[currentBone];
-        //foreach (KeyValuePair<Kinect.JointType, Kinect.JointType> pair in boneIndex2JointType.Values)
+        MapJointsToKinectVector4(body);
+        MapJointsToRotations(body);
+        MapJointsToPositions(body);
+        MapJointsToOrientations(body);
+
+        Kinect.JointType selectedJoint = boneIndex2JointType[currentBone];
+        //foreach (Kinect.JointType selectedJoint in boneIndex2JointType.Values)
         {
-            //Debug.DrawRay(restPosePositions[pair.Key], restPoseOrientation[new KeyValuePair<Kinect.JointType, Kinect.JointType>(pair.Key, pair.Value)], Color.red);
+            Kinect.JointType n = _KinectBoneMap[selectedJoint];
+            //Debug.DrawRay(currentPoseGameObject[c], currentPoseGameObject[c], Color.red);
 
-            //bonePositions[pair.Key].SetActive(true);
-            //bonePositions[pair.Key].GetComponent<MeshRenderer>().material.color = Color.green;
-            //bonePositions[pair.Key].transform.position = jointToPositionsMap[pair.Key];
-            //bonePositions[pair.Value].SetActive(true);
-            //bonePositions[pair.Value].GetComponent<MeshRenderer>().material.color = Color.red;
-            //bonePositions[pair.Value].transform.position = jointToPositionsMap[pair.Value];
-            //Debug.DrawRay(bonePositions[pair.Key].transform.position, bonePositions[pair.Value].transform.position - bonePositions[pair.Key].transform.position, Color.cyan);
+            currentPoseGameObjects[selectedJoint].SetActive(true);
+            currentPoseGameObjects[selectedJoint].GetComponent<MeshRenderer>().material.color = Color.green;
+            currentPoseGameObjects[selectedJoint].transform.position = jointToPositionsMap[selectedJoint];
+            currentPoseGameObjects[selectedJoint].transform.rotation = Quaternion.FromToRotation(restPoseOrientations[selectedJoint], jointToOrientationsMap[selectedJoint]);
+
+            currentPoseGameObjects[n].SetActive(true);
+            currentPoseGameObjects[n].GetComponent<MeshRenderer>().material.color = Color.red;
+            currentPoseGameObjects[n].transform.position = jointToPositionsMap[n];
+            Debug.DrawRay(currentPoseGameObjects[selectedJoint].transform.position, currentPoseGameObjects[n].transform.position - currentPoseGameObjects[selectedJoint].transform.position, Color.cyan);
+
+
+            restPoseGameObjects[selectedJoint].SetActive(true);
+            restPoseGameObjects[selectedJoint].GetComponent<MeshRenderer>().material.color = Color.green;
+            restPoseGameObjects[selectedJoint].transform.position = restPosePositions[selectedJoint];
+            restPoseGameObjects[selectedJoint].transform.rotation = Quaternion.FromToRotation(Vector3.up, restPoseOrientations[selectedJoint]);
+
+            restPoseGameObjects[n].SetActive(true);
+            restPoseGameObjects[n].GetComponent<MeshRenderer>().material.color = Color.red;
+            restPoseGameObjects[n].transform.position = restPosePositions[n];
+            Debug.DrawRay(restPoseGameObjects[selectedJoint].transform.position, restPoseGameObjects[n].transform.position - restPoseGameObjects[selectedJoint].transform.position, Color.cyan);
         }
 
         for (int i = 0; i < restPoseVertices.Length; i++)
@@ -295,21 +314,15 @@ public class LinearBlendSkinner : MonoBehaviour
             contributingJoints = MapContributingJointsToWeights(weights[i]);
             skinnedVertices[i] = Vector3.zero;
 
-            foreach (KeyValuePair<Kinect.JointType, Kinect.JointType> joint in contributingJoints.Keys)
+            foreach (Kinect.JointType joint in contributingJoints.Keys)
             {
-                if((int)joint.Key < currentBone || (int)joint.Key >= (int)Kinect.JointType.ThumbRight || (int)joint.Key > currentBone + followingBones)
+                if ((int)joint < currentBone || (int)joint >= (int)Kinect.JointType.ThumbRight || (int)joint > currentBone + followingBones)
                 {
                     continue;
                 }
-                Vector3 parentPosition = jointToPositionsMap[joint.Key];
-                Vector3 childPosition = jointToPositionsMap[joint.Value];
 
-                Vector3 currentOrientation = childPosition - parentPosition;
-
-                //Debug.DrawRay(parentPosition, currentOrientation, Color.red);
-
-                Matrix4x4 rotation = Matrix4x4.identity;// Matrix4x4.Rotate(Quaternion.FromToRotation(restPoseOrientations[joint], currentOrientation));
-                Matrix4x4 translation = Matrix4x4.Translate(parentPosition);
+                Matrix4x4 rotation = Matrix4x4.identity;// Matrix4x4.Rotate(Quaternion.FromToRotation(restPoseOrientations[joint], jointToOrientationsMap[joint]));
+                Matrix4x4 translation = Matrix4x4.Translate(jointToPositionsMap[joint]);
 
                 skinnedVertices[i] += (Vector3)(contributingJoints[joint] * (translation * rotation * restPoseVertices[i]));
                 //Debug.Log(skinnedVertices[i]);
@@ -331,45 +344,53 @@ public class LinearBlendSkinner : MonoBehaviour
     /// Maps the joint types to their measured Kinect joint orientation.
     /// </summary>
     /// <param name="body">The Kinect body data</param>
-    private Dictionary<Kinect.JointType, Quaternion> MapJointsToRotations(Kinect.IBody body)
+    private void MapJointsToRotations(Kinect.IBody body)
     {
-        Dictionary<Kinect.JointType, Quaternion> joints = new Dictionary<Kinect.JointType, Quaternion>();
+        jointToRotationsMap = new Dictionary<Kinect.JointType, Quaternion>();
         for (int type = 0; type <= (int)Kinect.JointType.ThumbRight; type++)
         {
-            joints.Add((Kinect.JointType)type, GetUnityMatrix4x4FromKinectVector4(body.JointOrientations[(Kinect.JointType)type].Orientation));
+            jointToRotationsMap.Add((Kinect.JointType)type, GetUnityMatrix4x4FromKinectVector4(body.JointOrientations[(Kinect.JointType)type].Orientation));
         }
 
-        return joints;
+    }
+
+    private void MapJointsToOrientations(Kinect.IBody body) { 
+        jointToOrientationsMap = new Dictionary<Kinect.JointType, Vector3>();
+        for (int type = 0; type <= (int)Kinect.JointType.ThumbRight; type++)
+        {
+            Vector3 parentPosition = jointToPositionsMap[(Kinect.JointType)type];
+            Vector3 childPosition = jointToPositionsMap[_KinectBoneMap[(Kinect.JointType)type]];
+
+            Vector3 currentOrientation = childPosition - parentPosition;
+            jointToOrientationsMap.Add((Kinect.JointType)type, currentOrientation);
+        }
+
     }
 
     /// <summary>
     /// Maps the joint types to their measured Kinect joint orientation.
     /// </summary>
     /// <param name="body">The Kinect body data</param>
-    private Dictionary<Kinect.JointType, Kinect.Vector4> MapJointsToKinectVector4(Kinect.IBody body)
+    private void MapJointsToKinectVector4(Kinect.IBody body)
     {
-        Dictionary<Kinect.JointType, Kinect.Vector4> joints = new Dictionary<Kinect.JointType, Kinect.Vector4>();
+         jointToKinectVector4Map = new Dictionary<Kinect.JointType, Kinect.Vector4>();
         for (int type = 0; type <= (int)Kinect.JointType.ThumbRight; type++)
         {
-            joints.Add((Kinect.JointType)type, (body.JointOrientations[(Kinect.JointType)type].Orientation));
+            jointToKinectVector4Map.Add((Kinect.JointType)type, (body.JointOrientations[(Kinect.JointType)type].Orientation));
         }
-
-        return joints;
     }
 
     /// <summary>
     /// Maps the joint types to their measured Kinect joint positions.
     /// </summary>
     /// <param name="body">The Kinect body data</param>
-    private Dictionary<Kinect.JointType, Vector3> MapJointsToPositions(Kinect.IBody body)
+    private void MapJointsToPositions(Kinect.IBody body)
     {
-        Dictionary<Kinect.JointType, Vector3> joints = new Dictionary<Kinect.JointType, Vector3>();
+        jointToPositionsMap = new Dictionary<Kinect.JointType, Vector3>();
         for (int type = 0; type <= (int)Kinect.JointType.ThumbRight; type++)
         {
-            joints.Add((Kinect.JointType)type, GetVector3FromJoint(body.Joints[(Kinect.JointType)type]));
+            jointToPositionsMap.Add((Kinect.JointType)type, GetVector3FromJoint(body.Joints[(Kinect.JointType)type]));
         }
-
-        return joints;
     }
 
     /// <summary>
@@ -377,9 +398,9 @@ public class LinearBlendSkinner : MonoBehaviour
     /// </summary>
     /// <param name="weight">The bone weight of a vertex</param>
     /// <returns></returns>
-    private Dictionary<KeyValuePair<Kinect.JointType, Kinect.JointType>, float> MapContributingJointsToWeights(BoneWeight weight)
+    private Dictionary<Kinect.JointType, float> MapContributingJointsToWeights(BoneWeight weight)
     {
-        Dictionary<KeyValuePair<Kinect.JointType, Kinect.JointType>, float> joints = new Dictionary<KeyValuePair<Kinect.JointType, Kinect.JointType>, float>();
+        Dictionary<Kinect.JointType, float> joints = new Dictionary<Kinect.JointType, float>();
 
         if (boneIndex2JointType.ContainsKey(weight.boneIndex0))
         {
