@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Kinect = Windows.Kinect;
 
 [RequireComponent(typeof(MeshRenderer))]
@@ -11,12 +12,16 @@ public class WeightVisualization : MonoBehaviour
     private BoneWeight[] weights;
     private Color[] colors;
 
+    public Slider slider;
+    private Material[] mats;
+
     public readonly BoneIndex2ColorMap boneIndex2ColorMap = new BoneIndex2ColorMap();
 
     // Start is called before the first frame update
     void Start()
     {
         rend = GetComponent<MeshRenderer>();
+        mats = rend.materials;
         restPose = GetComponent<MeshFilter>().mesh;
         weights = restPose.boneWeights;
         colors = new Color[weights.Length];
@@ -36,6 +41,14 @@ public class WeightVisualization : MonoBehaviour
             colors[i] = color;
         }
         GetComponent<MeshFilter>().mesh.colors = colors;
+    }
+
+    public void OnValueChanged(float value)
+    {
+        foreach (Material mat in mats)
+        {
+            mat.SetFloat("_WeightAmount", value);
+        }
     }
 
     public class BoneIndex2ColorMap
