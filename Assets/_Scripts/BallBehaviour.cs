@@ -26,9 +26,17 @@ public class BallBehaviour : MonoBehaviour
     private Image[] scoreDigits = new Image[2];
     private Image[] shotDigits = new Image[2];
 
-    private bool isGoal = false;
     private int currentScore = 0;
     private int currentShot = 0;
+
+    private GameStates currentState = GameStates.RESPAWN;
+
+    private enum GameStates
+    {
+        RESPAWN,
+        SHOT,
+        GOAL
+    }
 
     private void Start()
     {
@@ -49,6 +57,7 @@ public class BallBehaviour : MonoBehaviour
         AllMessagesOff();
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+        currentState = GameStates.RESPAWN;
     }
 
     private void ResetScore()
@@ -78,7 +87,7 @@ public class BallBehaviour : MonoBehaviour
 
     private void OnGoal()
     {
-        isGoal = true;
+        currentState = GameStates.GOAL;
         AllMessagesOff();
         goalMessage.gameObject.SetActive(true);
         audioSource.clip = goalSound;
@@ -89,18 +98,23 @@ public class BallBehaviour : MonoBehaviour
 
     private IEnumerator OnShot()
     {
-        isGoal = false;
+        currentState = GameStates.SHOT;
         currentShot++;
         SetCounter(shotDigits, currentShot);
 
-        for(int i = 3; i >= 0; i--)
+        for(int i = 300; i > 0; i--)
         {
-            DebugText.text = i + "";
-            Debug.Log(i + "");
-            yield return new WaitForSeconds(1);
+            if (currentState == GameStates.SHOT)
+            {
+                yield return new WaitForSeconds(0.01f);
+            }
+            else
+            {
+                break;
+            }
         }
 
-        if (!isGoal)
+        if (currentState == GameStates.SHOT)
         {
             AllMessagesOff();
             missMessage.gameObject.SetActive(true);

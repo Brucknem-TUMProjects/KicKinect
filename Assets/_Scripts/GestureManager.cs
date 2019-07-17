@@ -140,7 +140,7 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
 
     public void OnSwipeRight()
     {
-        ResetPlayerPosition();
+        //ResetPlayerPosition();
     }
 
     private void ResetPlayerPosition()

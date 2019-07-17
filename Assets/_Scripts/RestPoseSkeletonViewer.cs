@@ -10,12 +10,10 @@ public class RestPoseSkeletonViewer : MonoBehaviour
     public Material boneMaterial;
     public Transform renderParent;
     private Dictionary<Kinect.JointType, GameObject> restPoseGameObjects;
-    private WeightVisualization wv;
 
     // Start is called before the first frame update
     void Start()
     {
-        wv = GetComponent<WeightVisualization>();
         SetRestPoseValues();
     }
 
@@ -42,7 +40,7 @@ public class RestPoseSkeletonViewer : MonoBehaviour
                 lr.SetPosition(0, sourceJoint.transform.position);
                 lr.SetPosition(1, targetJoint.transform.position);
                 //lr.SetColors(GetColorForState(sourceJoint.TrackingState), GetColorForState(targetJoint.Value.TrackingState));
-                lr.startColor = wv.boneIndex2ColorMap[jointType2BoneIndex[jt]];
+                lr.startColor = WeightVisualization.boneIndex2Color[jointType2BoneIndex[jt]];
                 lr.gameObject.GetComponent<MeshRenderer>().material.color = lr.startColor;
                 lr.endColor = lr.startColor;
             }

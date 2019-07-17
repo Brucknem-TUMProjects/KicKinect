@@ -15,7 +15,6 @@ public class LinearBlendSkinner : MonoBehaviour
     [Range(0, (int)Kinect.JointType.ThumbRight)]
     public int followingBones = 0;
 
-    public Toggle onlyTranslation;
 
     //private Dictionary<Kinect.JointType, Kinect.JointType[]> _RealBoneMap = new Dictionary<Kinect.JointType, Kinect.JointType[]>()
     //{
@@ -158,8 +157,45 @@ public class LinearBlendSkinner : MonoBehaviour
         {18, Kinect.JointType.AnkleRight },
         {19, Kinect.JointType.FootRight },
         {20, Kinect.JointType.HipRight },
-
     };
+
+    //public static readonly Dictionary<int, Kinect.JointType> boneIndex2JointType = new Dictionary<int, Kinect.JointType>
+    //{
+    //    {0,  Kinect.JointType.SpineBase },
+    //    {1,  Kinect.JointType.SpineMid },
+
+    //    {2, Kinect.JointType.Neck },
+    //    {3, Kinect.JointType.Head },
+
+    //    // Missing
+    //    {4, Kinect.JointType.ShoulderLeft },
+    //    {5, Kinect.JointType.ElbowLeft },
+    //    {6, Kinect.JointType.WristLeft },
+    //    {7,  Kinect.JointType.HandLeft },
+
+    //    {8,  Kinect.JointType.ShoulderRight },
+    //    {9,  Kinect.JointType.ElbowRight },
+    //    {10, Kinect.JointType.WristRight },
+    //    {11, Kinect.JointType.HandRight },
+
+    //    {12, Kinect.JointType.HipLeft },
+    //    {13, Kinect.JointType.KneeLeft },
+    //    {14, Kinect.JointType.AnkleLeft },
+    //    {15, Kinect.JointType.FootLeft },
+
+
+    //    {16,  Kinect.JointType.HipRight },
+    //    {17,  Kinect.JointType.KneeRight },
+    //    {18, Kinect.JointType.AnkleRight },
+    //    {19, Kinect.JointType.FootRight },
+
+    //    // Missing
+    //    {20, Kinect.JointType.SpineShoulder },
+    //    {21, Kinect.JointType.HandTipLeft },
+    //    {22, Kinect.JointType.ThumbLeft },
+    //    {23, Kinect.JointType.HandTipRight },
+    //    {24, Kinect.JointType.ThumbRight }
+    //};
 
     /// <summary>
     /// The rest pose holding the raw mesh data.
@@ -338,11 +374,6 @@ public class LinearBlendSkinner : MonoBehaviour
                 }
 
                 Matrix4x4 rotation = Matrix4x4.identity;
-                if (!onlyTranslation.isOn)
-                {
-                    rotation = Matrix4x4.Rotate(Quaternion.FromToRotation(Vector3.up, jointToOrientationsMap[joint]));
-                }
-                ;
                 //Matrix4x4 scaling = Matrix4x4.Scale(new Vector3(100, 100, 100));
                 Matrix4x4 scaling = Matrix4x4.Scale(new Vector3(1, 1, 1));
                 //Debug.Log(joint.ToString() + " translation = \n" + translation.ToString());

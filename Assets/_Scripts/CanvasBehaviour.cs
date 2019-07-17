@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class CanvasBehaviour : MonoBehaviour
 {
+    public RectTransform credits;
+    public RectTransform buttons;
+
     public void OnLeave()
     {
         Debug.Log("OnLeave");
@@ -24,5 +27,17 @@ public class CanvasBehaviour : MonoBehaviour
     public void OnSkinning()
     {
         SceneManager.LoadScene("SkeletonTest");
+    }
+
+    public void OnCredits()
+    {
+        buttons.gameObject.SetActive(false);
+        credits.gameObject.SetActive(true);
+    }
+
+    public void OnLeaveCredits()
+    {
+        credits.gameObject.SetActive(false);
+        buttons.gameObject.SetActive(true);
     }
 }

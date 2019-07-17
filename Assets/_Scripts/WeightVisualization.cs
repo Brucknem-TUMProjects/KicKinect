@@ -14,9 +14,7 @@ public class WeightVisualization : MonoBehaviour
 
     public Slider slider;
     private Material[] mats;
-
-    public readonly BoneIndex2ColorMap boneIndex2ColorMap = new BoneIndex2ColorMap();
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -33,10 +31,10 @@ public class WeightVisualization : MonoBehaviour
             BoneWeight weight = weights[i];
 
             Color color = new Color(0, 0, 0, 1);
-                color += boneIndex2ColorMap[weight.boneIndex0] * weight.weight0;
-                color += boneIndex2ColorMap[weight.boneIndex1] * weight.weight1;
-                color += boneIndex2ColorMap[weight.boneIndex2] * weight.weight2;
-                color += boneIndex2ColorMap[weight.boneIndex3] * weight.weight3;
+                color += boneIndex2Color[weight.boneIndex0] * weight.weight0;
+                color += boneIndex2Color[weight.boneIndex1] * weight.weight1;
+                color += boneIndex2Color[weight.boneIndex2] * weight.weight2;
+                color += boneIndex2Color[weight.boneIndex3] * weight.weight3;
 
             colors[i] = color;
         }
@@ -98,9 +96,9 @@ public class WeightVisualization : MonoBehaviour
         { 19, Color.blue }, // FOOT LEFT
         { 20, Color.yellow }, // HIP LEFT
 
-        { 21, Color.white }, // KNEE RIGHT
-        { 22, Color.red }, // ANKLE RIGHT
-        { 23, Color.blue }, // FOOT RIGHT
+        { 21, Color.yellow }, // KNEE RIGHT
+        { 22, Color.blue }, // ANKLE RIGHT
+        { 23, Color.red }, // FOOT RIGHT
         { 24, Color.blue }, // HIP RIGHT
     };
 }

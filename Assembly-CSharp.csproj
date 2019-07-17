@@ -65,6 +65,7 @@
     <Compile Include="Assets\_Scripts\BallReset_Keyboard.cs" />
     <Compile Include="Assets\_Scripts\BodySourceManager.cs" />
     <Compile Include="Assets\_Scripts\CanvasBehaviour.cs" />
+    <Compile Include="Assets\_Scripts\DontDestroy.cs" />
     <Compile Include="Assets\_Scripts\GestureManager.cs" />
     <Compile Include="Assets\_Scripts\Kalman\KalmanFilter.cs" />
     <Compile Include="Assets\_Scripts\Kick_Keyboard.cs" />
