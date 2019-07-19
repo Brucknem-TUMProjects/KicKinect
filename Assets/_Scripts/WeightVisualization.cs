@@ -31,10 +31,10 @@ public class WeightVisualization : MonoBehaviour
             BoneWeight weight = weights[i];
 
             Color color = new Color(0, 0, 0, 1);
-                color += boneIndex2Color[weight.boneIndex0] * weight.weight0;
-                color += boneIndex2Color[weight.boneIndex1] * weight.weight1;
-                color += boneIndex2Color[weight.boneIndex2] * weight.weight2;
-                color += boneIndex2Color[weight.boneIndex3] * weight.weight3;
+            color += jointToColor[boneIndex2JointTypeForColor[weight.boneIndex0]] * weight.weight0;
+            color += jointToColor[boneIndex2JointTypeForColor[weight.boneIndex1]] * weight.weight1;
+            color += jointToColor[boneIndex2JointTypeForColor[weight.boneIndex2]] * weight.weight2;
+            color += jointToColor[boneIndex2JointTypeForColor[weight.boneIndex3]] * weight.weight3;
 
             colors[i] = color;
         }
@@ -68,37 +68,71 @@ public class WeightVisualization : MonoBehaviour
         }
     }
 
-    public static readonly Dictionary<int, Color> boneIndex2Color = new Dictionary<int, Color>()
+    public static readonly Dictionary<Kinect.JointType, Color> jointToColor = new Dictionary<Kinect.JointType, Color>()
     {
-        { 0, Color.red }, // SPINE BASE 
-        { 1, Color.green }, // SPINE MID 
+        { Kinect.JointType.SpineBase, Color.red }, // SPINE BASE 
+        { Kinect.JointType.SpineMid, Color.blue }, // SPINE MID 
 
-        { 2, Color.yellow }, // SHOULDER RIGHT
-        { 3, Color.blue }, // ELLBOW RIGHT
-        { 4, Color.yellow }, // WRIST RIGHT
-        { 5, Color.red }, // HAND RIGHT
-        { 6, Color.red }, // HAND TIP RIGHT
-        { 7, Color.blue }, // THUMB RIGHT
+        { Kinect.JointType.ShoulderRight, Color.green }, // SHOULDER RIGHT
+        { Kinect.JointType.ElbowRight, Color.red }, // ELLBOW RIGHT
+        { Kinect.JointType.WristRight, Color.blue }, // WRIST RIGHT
+        { Kinect.JointType.HandRight, Color.red }, // HAND RIGHT
+        { Kinect.JointType.HandTipRight, Color.blue }, // HAND TIP RIGHT
+        { Kinect.JointType.ThumbRight, Color.green }, // THUMB RIGHT
 
-        { 8, Color.blue }, // SHOULDER LEFT
-        { 9, Color.yellow }, // ELLBOW LEFT
-        { 10, Color.green }, // WRIST LEFT
-        { 11, Color.red }, // HAND LEFT
-        { 12, Color.red }, // HAND TIP LEFT
-        { 13, Color.blue }, // THUMB LEFT
+        { Kinect.JointType.ShoulderLeft, Color.yellow }, // SHOULDER LEFT
+        { Kinect.JointType.ElbowLeft, Color.blue }, // ELLBOW LEFT
+        { Kinect.JointType.WristLeft, Color.red }, // WRIST LEFT
+        { Kinect.JointType.HandLeft, Color.blue }, // HAND LEFT
+        { Kinect.JointType.HandTipLeft, Color.red }, // HAND TIP LEFT
+        { Kinect.JointType.ThumbLeft, Color.yellow }, // THUMB LEFT
 
-        { 14, Color.red }, // SPINE SHOULDER
-        { 15, Color.blue }, // NECK
-        { 16, Color.white }, // Maybe HEAD
+        { Kinect.JointType.SpineShoulder, Color.red }, // SPINE SHOULDER
+        { Kinect.JointType.Neck, Color.blue }, // NECK
+        { Kinect.JointType.Head, Color.white }, // Maybe HEAD
 
-        { 17, Color.white }, // KNEE LEFT
-        { 18, Color.red }, // ANKLE LEFT
-        { 19, Color.blue }, // FOOT LEFT
-        { 20, Color.yellow }, // HIP LEFT
+        { Kinect.JointType.KneeLeft, Color.blue }, // KNEE LEFT
+        { Kinect.JointType.AnkleLeft, Color.red }, // ANKLE LEFT
+        { Kinect.JointType.FootLeft, Color.blue }, // FOOT LEFT
+        { Kinect.JointType.HipLeft, Color.white }, // HIP LEFT
 
-        { 21, Color.yellow }, // KNEE RIGHT
-        { 22, Color.blue }, // ANKLE RIGHT
-        { 23, Color.red }, // FOOT RIGHT
-        { 24, Color.blue }, // HIP RIGHT
+        { Kinect.JointType.KneeRight, Color.green }, // KNEE RIGHT
+        { Kinect.JointType.AnkleRight, Color.blue }, // ANKLE RIGHT
+        { Kinect.JointType.FootRight, Color.red }, // FOOT RIGHT
+        { Kinect.JointType.HipRight, Color.magenta }, // HIP RIGHT
+    };
+
+    public static readonly Dictionary<int, Kinect.JointType> boneIndex2JointTypeForColor = new Dictionary<int, Kinect.JointType>
+    {
+        {(int)Kinect.JointType.SpineBase,  Kinect.JointType.SpineBase },
+        {(int)Kinect.JointType.SpineMid,  Kinect.JointType.SpineMid },
+
+        {(int)Kinect.JointType.Head,  Kinect.JointType.ShoulderRight },
+        {(int)Kinect.JointType.Neck,  Kinect.JointType.SpineShoulder },
+        {(int)Kinect.JointType.SpineShoulder,  Kinect.JointType.HipLeft },
+
+        {(int)Kinect.JointType.ShoulderRight,  Kinect.JointType.ThumbRight },
+        {(int)Kinect.JointType.ElbowRight,  Kinect.JointType.ShoulderLeft },
+        {(int)Kinect.JointType.WristRight,  Kinect.JointType.ElbowLeft },
+        {(int)Kinect.JointType.HandRight,  Kinect.JointType.WristLeft },
+        {(int)Kinect.JointType.HandTipRight,  Kinect.JointType.FootRight },
+        {(int)Kinect.JointType.ThumbRight,  Kinect.JointType.Head },
+
+        {(int)Kinect.JointType.ShoulderLeft,  Kinect.JointType.ElbowRight },
+        {(int)Kinect.JointType.ElbowLeft,  Kinect.JointType.WristRight },
+        {(int)Kinect.JointType.WristLeft,  Kinect.JointType.HandRight },
+        {(int)Kinect.JointType.HandLeft,  Kinect.JointType.HandTipRight },
+        {(int)Kinect.JointType.HandTipLeft,  Kinect.JointType.KneeRight },
+        {(int)Kinect.JointType.ThumbLeft,  Kinect.JointType.AnkleRight },
+
+        {(int)Kinect.JointType.FootRight,  Kinect.JointType.FootLeft },
+        {(int)Kinect.JointType.AnkleRight,  Kinect.JointType.AnkleLeft },
+        {(int)Kinect.JointType.KneeRight,  Kinect.JointType.KneeLeft },
+        {(int)Kinect.JointType.HipRight,  Kinect.JointType.HipRight },
+
+        {(int)Kinect.JointType.FootLeft,  Kinect.JointType.Neck },
+        {(int)Kinect.JointType.AnkleLeft,  Kinect.JointType.ThumbLeft },
+        {(int)Kinect.JointType.KneeLeft,  Kinect.JointType.HandTipLeft },
+        {(int)Kinect.JointType.HipLeft,  Kinect.JointType.HandLeft },
     };
 }

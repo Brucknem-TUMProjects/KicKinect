@@ -43,6 +43,8 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
 
         manager.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);
         manager.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
+        manager.DetectGesture(userId, KinectGestures.Gestures.SwipeDown);
+        manager.DetectGesture(userId, KinectGestures.Gestures.SwipeUp);
 
         //		manager.DetectGesture(userId, KinectGestures.Gestures.Push);
         //		manager.DetectGesture(userId, KinectGestures.Gestures.Pull);
@@ -112,6 +114,10 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
         {
             OnSwipeRight();
         }
+        else if (gesture == KinectGestures.Gestures.SwipeDown || gesture == KinectGestures.Gestures.SwipeUp)
+        {
+            ball.ResetCounters();
+        }
 
         progressDisplayed = false;
 
@@ -140,12 +146,12 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
 
     public void OnSwipeRight()
     {
-        //ResetPlayerPosition();
+        SpawnBall();
     }
 
     private void ResetPlayerPosition()
     {
-        player.transform.position = Vector3.zero;
+        player.transform.position = ballSpawn.transform.position;
     }
 
     private void SpawnBall()

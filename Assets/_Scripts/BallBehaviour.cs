@@ -60,18 +60,23 @@ public class BallBehaviour : MonoBehaviour
         currentState = GameStates.RESPAWN;
     }
 
-    private void ResetScore()
+    public void ResetCounters()
     {
         currentScore = 0;
-        SetCounter(shotDigits, 0);
-        SetCounter(scoreDigits, 1);
+        currentShot = 0;
+        SetCounter(shotDigits, currentShot);
+        SetCounter(scoreDigits, currentScore);
     }
 
     private void OnTriggerEnter(Collider other)
-    {        
-        if(other.tag == "ScoreReceiver")
+    {
+        if (other.tag == "ScoreReceiverLower")
         {
-            OnGoal();
+            OnGoal(true);
+        }
+        if (other.tag == "ScoreReceiverUpper")
+        {
+            OnGoal(false);
         }
     }
 
@@ -85,14 +90,21 @@ public class BallBehaviour : MonoBehaviour
         }
     }
 
-    private void OnGoal()
+    private void OnGoal(bool lower)
     {
         currentState = GameStates.GOAL;
         AllMessagesOff();
         goalMessage.gameObject.SetActive(true);
         audioSource.clip = goalSound;
         audioSource.Play();
-        currentScore++;
+        if (lower)
+        {
+            currentScore++;
+        }
+        else
+        {
+            currentScore += 3;
+        }
         SetCounter(scoreDigits, currentScore);
     }
 

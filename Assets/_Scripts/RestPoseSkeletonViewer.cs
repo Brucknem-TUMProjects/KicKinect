@@ -33,14 +33,14 @@ public class RestPoseSkeletonViewer : MonoBehaviour
             {
                 targetJoint = restPoseGameObjects[LinearBlendSkinner._KinectBoneMap[jt]];
             }
-            
+
             LineRenderer lr = sourceJoint.GetComponent<LineRenderer>();
             if (targetJoint != null)
             {
                 lr.SetPosition(0, sourceJoint.transform.position);
                 lr.SetPosition(1, targetJoint.transform.position);
                 //lr.SetColors(GetColorForState(sourceJoint.TrackingState), GetColorForState(targetJoint.Value.TrackingState));
-                lr.startColor = WeightVisualization.boneIndex2Color[jointType2BoneIndex[jt]];
+                lr.startColor = WeightVisualization.jointToColor[jt];
                 lr.gameObject.GetComponent<MeshRenderer>().material.color = lr.startColor;
                 lr.endColor = lr.startColor;
             }
@@ -91,38 +91,4 @@ public class RestPoseSkeletonViewer : MonoBehaviour
             }
         }
     }
-
-    public static readonly Dictionary<Kinect.JointType, int> jointType2BoneIndex = new Dictionary<Kinect.JointType, int>
-    {
-        {Kinect.JointType.SpineBase, 0 },
-        {Kinect.JointType.SpineMid , 1},
-
-        {Kinect.JointType.ShoulderRight, 2 },
-        {Kinect.JointType.ElbowRight ,3},
-        {Kinect.JointType.WristRight ,4},
-        {Kinect.JointType.HandRight,5 },
-        {Kinect.JointType.HandTipRight,6 },
-        {Kinect.JointType.ThumbRight ,7},
-
-        { Kinect.JointType.ShoulderLeft,8 },
-        { Kinect.JointType.ElbowLeft ,9},
-        { Kinect.JointType.WristLeft ,10},
-        { Kinect.JointType.HandLeft ,11},
-        { Kinect.JointType.HandTipLeft,12 },
-        { Kinect.JointType.ThumbLeft,13 },
-
-        {Kinect.JointType.SpineShoulder,14 },
-        {Kinect.JointType.Neck ,15},
-        {Kinect.JointType.Head ,16},
-
-        {Kinect.JointType.KneeLeft,17 },
-        {Kinect.JointType.AnkleLeft ,18},
-        {Kinect.JointType.FootLeft ,19},
-        {Kinect.JointType.HipLeft ,20},
-
-        {Kinect.JointType.KneeRight ,21},
-        {Kinect.JointType.AnkleRight ,22},
-        {Kinect.JointType.FootRight,23 },
-        {Kinect.JointType.HipRight ,24},
-    };
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using UnityEngine;
 using System.Security;
 using Newtonsoft.Json;
+using System.Threading;
 
 namespace Windows.Kinect
 {
@@ -684,6 +685,13 @@ namespace Windows.Kinect
 
         public BodyFrameReaderMock(string path)
         {
+            Thread t = new Thread(new ParameterizedThreadStart(LoadFramesAsync));
+            t.Start(path);
+        }
+
+        private void LoadFramesAsync(object _path)
+        {
+            string path = _path.ToString();
             List<string> files = new List<string>(Directory.GetFiles(path));
             files = files.Where(f => f.EndsWith(".json")).ToList();
 

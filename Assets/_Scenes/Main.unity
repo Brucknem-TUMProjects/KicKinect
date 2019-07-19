@@ -252,19 +252,13 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 271736891}
   m_CullTransparentMesh: 0
---- !u!1 &288992300 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7096547667137671902, guid: dfb8170c3b3d393469d31853b5a71d66,
-    type: 3}
-  m_PrefabInstance: {fileID: 851279690}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &513424317 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7096547667078490110, guid: dfb8170c3b3d393469d31853b5a71d66,
     type: 3}
   m_PrefabInstance: {fileID: 851279690}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 288992300}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 06c52c07402f7274cab64e484b1bddc9, type: 3}
@@ -1451,7 +1445,17 @@ PrefabInstance:
     - target: {fileID: 8665013366270967531, guid: 655317a8cf9bb344fb974c5e410e1114,
         type: 3}
       propertyPath: estimateJointVelocities
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8665013366270967531, guid: 655317a8cf9bb344fb974c5e410e1114,
+        type: 3}
+      propertyPath: avatarControllers.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8665013366270967531, guid: 655317a8cf9bb344fb974c5e410e1114,
+        type: 3}
+      propertyPath: playerCalibrationPose
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8665013366270967525, guid: 655317a8cf9bb344fb974c5e410e1114,
         type: 3}
@@ -1566,7 +1570,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ball: {fileID: 2049804132}
   ballSpawn: {fileID: 723858091}
-  player: {fileID: 288992300}
+  player: {fileID: 1898273655}
   spawnMessage: {fileID: 2211097791187111111}
   goalMessage: {fileID: 2211097789995867164}
   missMessage: {fileID: 2211097791416075930}
@@ -1866,6 +1870,56 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1852797657
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1852797658}
+  - component: {fileID: 1852797659}
+  m_Layer: 0
+  m_Name: ScoreReceiverUpper
+  m_TagString: ScoreReceiverUpper
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1852797658
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852797657}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.65, y: 0.5, z: 0.35}
+  m_LocalScale: {x: 2, y: 2, z: 0.01}
+  m_Children: []
+  m_Father: {fileID: 1840399119737947557}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1852797659
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852797657}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3, y: 0.4, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1898273655 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7096547667137671876, guid: dfb8170c3b3d393469d31853b5a71d66,
+    type: 3}
+  m_PrefabInstance: {fileID: 851279690}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1936953649 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7096547667137671862, guid: dfb8170c3b3d393469d31853b5a71d66,
@@ -2029,6 +2083,7 @@ Transform:
   m_LocalScale: {x: 2, y: 1.5, z: 1}
   m_Children:
   - {fileID: 1840399119957574627}
+  - {fileID: 1852797658}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2043,8 +2098,8 @@ GameObject:
   - component: {fileID: 1840399119957574627}
   - component: {fileID: 1840399119957574636}
   m_Layer: 0
-  m_Name: ScoreReceiver
-  m_TagString: ScoreReceiver
+  m_Name: ScoreReceiverLower
+  m_TagString: ScoreReceiverLower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2057,7 +2112,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1840399119957574626}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.53}
+  m_LocalPosition: {x: -0.65, y: -0.6, z: 0.35}
   m_LocalScale: {x: 2, y: 2, z: 0.01}
   m_Children: []
   m_Father: {fileID: 1840399119737947557}
@@ -2074,7 +2129,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.9, y: 1, z: 1}
+  m_Size: {x: 0.3, y: 0.4, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!64 &1840399120275214805
 MeshCollider:
@@ -2707,6 +2762,7 @@ GameObject:
   - component: {fileID: 2211097790992954532}
   - component: {fileID: 2211097790992954533}
   - component: {fileID: 2211097790992954535}
+  - component: {fileID: 2211097790992954536}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2728,6 +2784,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   credits: {fileID: 0}
   buttons: {fileID: 0}
+--- !u!222 &2211097790992954536
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2211097790992954534}
+  m_CullTransparentMesh: 0
 --- !u!222 &2211097791081653005
 CanvasRenderer:
   m_ObjectHideFlags: 0
