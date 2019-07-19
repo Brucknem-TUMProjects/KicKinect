@@ -6402,6 +6402,18 @@ MonoBehaviour:
   objectPool: {fileID: 646776257}
   currentBone: 0
   followingBones: 0
+--- !u!114 &586515959 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6137143831517803277, guid: 51f0a243ea66c604784c9c7ea7bea648,
+    type: 3}
+  m_PrefabInstance: {fileID: 1771818871}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586515955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc624fd7d37e1b46a2f4863c60f141e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &591877272
 GameObject:
   m_ObjectHideFlags: 0
@@ -12419,16 +12431,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slider
       objectReference: {fileID: 0}
-    - target: {fileID: 2175835489290195346, guid: 8494a1cd427d75841adb25f1c81889a3,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1887334340}
-    - target: {fileID: 2175835489290195346, guid: 8494a1cd427d75841adb25f1c81889a3,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnValueChanged
-      objectReference: {fileID: 0}
     - target: {fileID: 2175835489290195349, guid: 8494a1cd427d75841adb25f1c81889a3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12533,6 +12535,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2175835489290195346, guid: 8494a1cd427d75841adb25f1c81889a3,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 586515959}
+    - target: {fileID: 2175835489290195346, guid: 8494a1cd427d75841adb25f1c81889a3,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnValueChanged
       objectReference: {fileID: 0}
     - target: {fileID: 2175835487805176497, guid: 8494a1cd427d75841adb25f1c81889a3,
         type: 3}
@@ -20168,6 +20180,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6137143831517803277, guid: 51f0a243ea66c604784c9c7ea7bea648,
+        type: 3}
+      propertyPath: slider
+      value: 
+      objectReference: {fileID: 677927346}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51f0a243ea66c604784c9c7ea7bea648, type: 3}
 --- !u!1 &1782977457

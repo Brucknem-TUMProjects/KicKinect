@@ -712,6 +712,10 @@ namespace Windows.Kinect
 
         public override IBodyFrame AcquireLatestFrame()
         {
+            if(frames.Count <= 0)
+            {
+                return null;
+            }
             frameIndex++;
             frameIndex %= frames.Count;
             return new BodyFrameMock(frames[frameIndex]);

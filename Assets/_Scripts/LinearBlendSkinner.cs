@@ -87,6 +87,38 @@ public class LinearBlendSkinner : MonoBehaviour
         {(int)Kinect.JointType.HipLeft,  Kinect.JointType.HandRight },
     };
 
+    public static readonly Dictionary<Kinect.JointType, bool> jointToFlipOrientation = new Dictionary<Kinect.JointType, bool>()
+    {
+        { Kinect.JointType.FootLeft, true },
+        { Kinect.JointType.AnkleLeft, false },
+        { Kinect.JointType.KneeLeft, false },
+        { Kinect.JointType.HipLeft, false },
+
+        { Kinect.JointType.FootRight, true },
+        { Kinect.JointType.AnkleRight, false },
+        { Kinect.JointType.KneeRight, false },
+        { Kinect.JointType.HipRight, false },
+
+        { Kinect.JointType.HandTipLeft, true },
+        { Kinect.JointType.ThumbLeft, true },
+        { Kinect.JointType.HandLeft, false },
+        { Kinect.JointType.WristLeft, false },
+        { Kinect.JointType.ElbowLeft, false },
+        { Kinect.JointType.ShoulderLeft, false },
+
+        { Kinect.JointType.HandTipRight, true },
+        { Kinect.JointType.ThumbRight, true },
+        { Kinect.JointType.HandRight, false },
+        { Kinect.JointType.WristRight, false },
+        { Kinect.JointType.ElbowRight, false },
+        { Kinect.JointType.ShoulderRight, false },
+
+        { Kinect.JointType.SpineBase, true },
+        { Kinect.JointType.SpineMid, true },
+        { Kinect.JointType.SpineShoulder, true },
+        { Kinect.JointType.Neck, true },
+        { Kinect.JointType.Head, true },
+    };
 
     /// <summary>
     /// The rest pose holding the raw mesh data.
@@ -122,8 +154,13 @@ public class LinearBlendSkinner : MonoBehaviour
 
     private Dictionary<Kinect.JointType, Kinect.Vector4> jointToKinectVector4Map;
     private Dictionary<Kinect.JointType, Quaternion> jointToRotationsMap;
+    private Dictionary<Kinect.JointType, Matrix4x4> jointToRodriguesMap;
     private Dictionary<Kinect.JointType, Vector3> jointToPositionsMap;
     private Dictionary<Kinect.JointType, Vector3> jointToOrientationsMap;
+
+    private List<Dictionary<Kinect.JointType, float>> contributingJointsMap = new List<Dictionary<Kinect.JointType, float>>();
+
+    private Matrix4x4 correctiveRotation = Matrix4x4.Rotate(Quaternion.Euler(-90, 0, 0));
 
     // Start is called before the first frame update
     void Start()
@@ -138,6 +175,7 @@ public class LinearBlendSkinner : MonoBehaviour
         {
             //restPoseVertices[i] = transform.TransformPoint(restPose.vertices[i].x, restPose.vertices[i].y, restPose.vertices[i].z);
             restPoseVertices[i] = new Vector3(restPose.vertices[i].x, restPose.vertices[i].y, restPose.vertices[i].z);
+            contributingJointsMap.Add(MapContributingJointsToWeights(weights[i]));
         }
     }
 
@@ -149,7 +187,7 @@ public class LinearBlendSkinner : MonoBehaviour
             Vector3 orientation = restPosePositions[child] - joint.Value;
             restPoseOrientations.Add(joint.Key, orientation);
         }
-        Debug.Log(restPoseOrientations.Count);
+        //Debug.Log(restPoseOrientations.Count);
     }
 
     private void SetRestPoseValues()
@@ -199,7 +237,7 @@ public class LinearBlendSkinner : MonoBehaviour
     /// <param name="body">The Kinect body data</param>
     public void SetParameters(Kinect.IBody body)
     {
-        Vector3 root = SetRoot(body.Joints[Kinect.JointType.SpineBase]);
+        //Vector3 root = SetRoot(body.Joints[Kinect.JointType.SpineBase]);
         //transform.localRotation = Quaternion.Euler(90, 0, 0);
         //Debug.DrawRay(root, Vector3.up * 10000, Color.green);
 
@@ -213,12 +251,12 @@ public class LinearBlendSkinner : MonoBehaviour
         }
 
         Vector3[] skinnedVertices = new Vector3[restPoseVertices.Length];
-        Dictionary<Kinect.JointType, float> contributingJoints;
 
         MapJointsToKinectVector4(body);
         MapJointsToRotations(body);
         MapJointsToPositions(body);
         MapJointsToOrientations(body);
+        //MapJointsToRodriguez(body);
 
         //Kinect.JointType selectedJoint = boneIndex2JointType[currentBone];
         foreach (Kinect.JointType selectedJoint in boneIndex2JointType.Values)
@@ -231,36 +269,26 @@ public class LinearBlendSkinner : MonoBehaviour
             currentPoseGameObjects[selectedJoint].GetComponent<MeshRenderer>().material.color = Color.green;
             currentPoseGameObjects[selectedJoint].transform.position = jointToPositionsMap[selectedJoint];
             currentPoseGameObjects[selectedJoint].transform.rotation = Quaternion.FromToRotation(Vector3.up, jointToOrientationsMap[selectedJoint]);
-            //currentPoseGameObjects[selectedJoint].transform.up = jointToOrientationsMap[selectedJoint];
 
-            //currentPoseGameObjects[n].SetActive(true);
-            //currentPoseGameObjects[n].GetComponent<MeshRenderer>().material.color = Color.red;
-            //currentPoseGameObjects[n].transform.position = jointToPositionsMap[n];
-            //Debug.DrawRay(currentPoseGameObjects[selectedJoint].transform.position, currentPoseGameObjects[n].transform.position - currentPoseGameObjects[selectedJoint].transform.position, Color.cyan);
-
-
-            //restPoseGameObjects[selectedJoint].SetActive(true);
-            //restPoseGameObjects[selectedJoint].GetComponent<MeshRenderer>().material.color = Color.green;
-            //restPoseGameObjects[selectedJoint].transform.position = restPosePositions[selectedJoint];
-            //restPoseGameObjects[selectedJoint].transform.rotation = Quaternion.FromToRotation(Vector3.up, restPoseOrientations[selectedJoint]);
-
-            //restPoseGameObjects[n].SetActive(true);
-            //restPoseGameObjects[n].GetComponent<MeshRenderer>().material.color = Color.red;
-            //restPoseGameObjects[n].transform.position = restPosePositions[n];
-            //Debug.DrawRay(restPoseGameObjects[selectedJoint].transform.position, restPoseGameObjects[n].transform.position - restPoseGameObjects[selectedJoint].transform.position, Color.cyan);
+            Vector3 orientation = (jointToRotationsMap[selectedJoint] * Vector3.up).normalized * 0.1f;
+            //if (!jointToFlipOrientation[selectedJoint])
+            {
+                orientation *= -1;
+            }
+            Debug.DrawRay(currentPoseGameObjects[selectedJoint].transform.position, orientation, Color.cyan);
         }
+
         //List<String> debug = new List<string>();
         //debug.Add("");
         for (int i = 0; i < restPoseVertices.Length; i++)
         {
             //Debug.Log("RestPoseVertex[" + i + "] = " + restPoseVertices[i]);
-            contributingJoints = MapContributingJointsToWeights(weights[i]);
             skinnedVertices[i] = Vector3.zero;
 
             //string debug = "restPoseVertices[" + i + "] = " + restPoseVertices[i] + "\n\n";
 
             //debug[debug.Count - 1] += ("skinnedVertices[" + i + "]: " + skinnedVertices[i] + " - " + "restPoseVertices[" + i + "]: " + restPoseVertices[i] + "\n");
-            foreach (Kinect.JointType joint in contributingJoints.Keys)
+            foreach (Kinect.JointType joint in contributingJointsMap[i].Keys)
             {
                 //Debug.Log(joint.ToString() + " = " + jointToPositionsMap[joint]);
                 if (!completeRendering && ((int)joint < currentBone || (int)joint >= (int)Kinect.JointType.ThumbRight || (int)joint > currentBone + followingBones))
@@ -268,11 +296,45 @@ public class LinearBlendSkinner : MonoBehaviour
                     continue;
                 }
 
-                Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.Euler(-90, 0, 0));// Matrix4x4.identity;
+                Matrix4x4 rotation = Matrix4x4.identity;
+                //Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.FromToRotation(Vector3.up, jointToOrientationsMap[joint]));
+                //Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.FromToRotation(restPoseOrientations[joint], jointToOrientationsMap[joint]));
+                //Matrix4x4 rotation = Matrix4x4.Rotate(jointToRotationsMap[joint]);
                 Matrix4x4 translation = Matrix4x4.Translate(jointToPositionsMap[joint]);
                 Matrix4x4 scaling = Matrix4x4.Scale(new Vector3(1, 1, 1));
 
-                Vector3 preAssignment = (Vector3)(contributingJoints[joint] * (translation.MultiplyPoint3x4(rotation.MultiplyPoint3x4(restPoseVertices[i]))));
+                Vector3 r = restPoseVertices[i];
+                r = correctiveRotation.MultiplyPoint3x4(rotation.MultiplyPoint3x4(r));
+                switch (joint)
+                {
+                    case Kinect.JointType.SpineBase:
+                    case Kinect.JointType.SpineMid:
+                    case Kinect.JointType.SpineShoulder:
+                    case Kinect.JointType.Neck:
+                        r = Quaternion.Euler(0, 180, 0) * r;
+                        r = jointToRotationsMap[joint] * r;
+                        break;
+                    case Kinect.JointType.HipLeft:
+                    case Kinect.JointType.KneeLeft:
+                    case Kinect.JointType.AnkleLeft:
+                        //r = Quaternion.Euler(0, 90, 180) * r;
+                        //r = jointToRotationsMap[joint] * r;
+                        //r = Quaternion.Euler(180, 180, 0) * r;
+                        break;
+                }
+
+                switch (joint)
+                {
+                    case Kinect.JointType.KneeLeft:
+                        if (!jointToFlipOrientation[joint])
+                        {
+                            //r *= -1;
+                        }
+                        break;
+                }
+
+                Vector3 preAssignment = (Vector3)(contributingJointsMap[i][joint] *  translation.MultiplyPoint3x4(r));
+
                 skinnedVertices[i] += preAssignment;
                 //debug[debug.Count - 1] += joint.ToString() + "Weight: " + contributingJoints[joint] +
                 //    "\nRotation: \n" + rotation.ToString() +
@@ -280,6 +342,7 @@ public class LinearBlendSkinner : MonoBehaviour
                 //    "\nScaling\n" + scaling.ToString() + "\n";
                 //debug += "\n\n ************************************************************************************* \n\n";
             }
+            //skinnedVertices[i] /= 4;
             if(i % 100 == 0)
             {
                 //debug.Add("");
@@ -301,12 +364,19 @@ public class LinearBlendSkinner : MonoBehaviour
     private void MapJointsToRotations(Kinect.IBody body)
     {
         jointToRotationsMap = new Dictionary<Kinect.JointType, Quaternion>();
+        jointToRodriguesMap = new Dictionary<Kinect.JointType, Matrix4x4>();
         for (int type = 0; type <= (int)Kinect.JointType.ThumbRight; type++)
         {
-            jointToRotationsMap.Add((Kinect.JointType)type, GetUnityMatrix4x4FromKinectVector4(body.JointOrientations[(Kinect.JointType)type].Orientation));
+            Quaternion rotation = GetUnityMatrix4x4FromKinectVector4(body.JointOrientations[(Kinect.JointType)type].Orientation);
+            if (!jointToFlipOrientation[(Kinect.JointType)type])
+            {
+                //rotation = Quaternion.Euler(-rotation.eulerAngles);
+            }
+            jointToRotationsMap.Add((Kinect.JointType)type, rotation);
+            jointToRodriguesMap.Add((Kinect.JointType)type,Rodrigues(rotation * Vector3.up));
         }
-
     }
+
     /// <summary>
     /// Maps the joint types to their measured Kinect joint orientation.
     /// </summary>
@@ -323,6 +393,7 @@ public class LinearBlendSkinner : MonoBehaviour
         }
 
     }
+
 
     /// <summary>
     /// Maps the joint types to their measured Kinect joint orientation.
@@ -405,14 +476,7 @@ public class LinearBlendSkinner : MonoBehaviour
         transform.parent.position = root;
         return root;
     }
-
-    //TODO calculate G(Theta, J)
-    //TODO Maybe calculate Theta first
-    public Matrix4x4 PartTransformation(List<Kinect.Joint> jointLocations)
-    {
-        return Matrix4x4.identity;
-    }
-
+    
     //public Matrix4x4 GTrafo(Vector3 rotation, Vector3 joint_position)
     //{
     //    Matrix3x3 expomap = ExpoMap(rotation);
@@ -481,4 +545,47 @@ public class LinearBlendSkinner : MonoBehaviour
         return new Quaternion(vector.X, vector.Y, vector.Z, vector.W);
     }
 
+    /// <summary>
+    /// Rodrigues formula
+    /// https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
+    /// </summary>
+    /// <param name="_k"></param>
+    /// <returns></returns>
+    private static Matrix4x4 Rodrigues(Vector3 _k)
+    {
+        Vector3 k = _k.normalized;
+        float theta = _k.magnitude;
+
+        Matrix4x4 K = new Matrix4x4(
+            new Vector4(0, k.z, -k.y,0),
+            new Vector4(-k.z, 0, k.x,0),
+            new Vector4(k.y, -k.x, 0,0),
+            new Vector4(0,0,0,1)
+            );
+
+        Matrix4x4 sin = Matrix4x4.Scale(Vector3.one * ((float) Math.Sin(theta)));
+        Matrix4x4 cos = Matrix4x4.Scale(Vector3.one * ((float)Math.Cos(1 - theta)));
+        Matrix4x4 R = Add(Add(Matrix4x4.identity, (sin * K)), cos * K * K);
+
+        return R;
+    }
+
+    /// <summary>
+    /// Matrix addition
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <returns></returns>
+    private static Matrix4x4 Add(Matrix4x4 a, Matrix4x4 b)
+    {
+        Matrix4x4 result = Matrix4x4.zero;
+        for(int i = 0; i < 4; i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                result[i,j] = a[i, j] + b[i, j];
+            }
+        }
+        return result;
+    }
 }
