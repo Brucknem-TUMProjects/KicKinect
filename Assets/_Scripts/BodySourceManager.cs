@@ -15,6 +15,7 @@ public class BodySourceManager : MonoBehaviour
 
     private IKinectSensor _Sensor;
     private IBodyFrameReader _Reader;
+
     private IBody[] _Data = null;
 
     private int i = -1;
@@ -30,24 +31,7 @@ public class BodySourceManager : MonoBehaviour
         standardDirectory = Application.dataPath + "/_Recordings/_Skeleton/";
         Directory.CreateDirectory(standardDirectory);
 
-        if (mock)
-        {
-            _Sensor = KinectSensor.GetMock();
-        }
-        else
-        {
-            _Sensor = KinectSensor.GetDefault();
-        }
-
-        if (_Sensor != null)
-        {
-            _Reader = _Sensor.BodyFrameSource.OpenReader(standardDirectory);
-
-            if (!_Sensor.IsOpen)
-            {
-                _Sensor.Open();
-            }
-        }
+        OpenSensorAndReader();
     }
 
     void Update()
@@ -79,7 +63,29 @@ public class BodySourceManager : MonoBehaviour
         }
     }
 
-    void OnApplicationQuit()
+    private void OpenSensorAndReader()
+    {
+        if (mock)
+        {
+            _Sensor = KinectSensor.GetMock();
+        }
+        else
+        {
+            _Sensor = KinectSensor.GetDefault();
+        }
+
+        if (_Sensor != null)
+        {
+            _Reader = _Sensor.BodyFrameSource.OpenReader(standardDirectory);
+
+            if (!_Sensor.IsOpen)
+            {
+                _Sensor.Open();
+            }
+        }
+    }
+
+    private void CloseSensorAndReader()
     {
         if (_Reader != null)
         {
@@ -96,6 +102,11 @@ public class BodySourceManager : MonoBehaviour
 
             _Sensor = null;
         }
+    }
+
+    void OnApplicationQuit()
+    {
+        CloseSensorAndReader();
     }
 
     public static bool HasTrackedBody(ICollection<IBody> bodies)

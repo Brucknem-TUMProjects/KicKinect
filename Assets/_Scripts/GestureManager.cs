@@ -35,22 +35,13 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
 
     public void UserDetected(long userId, int userIndex)
     {
-        // as an example - detect these user specific gestures
         KinectManager manager = KinectManager.Instance;
-
-        ////manager.DetectGesture(userId, KinectGestures.Gestures.Jump);
-        //manager.DetectGesture(userId, KinectGestures.Gestures.Squat);
 
         manager.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);
         manager.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
-        manager.DetectGesture(userId, KinectGestures.Gestures.SwipeDown);
+        //manager.DetectGesture(userId, KinectGestures.Gestures.SwipeDown);
         manager.DetectGesture(userId, KinectGestures.Gestures.SwipeUp);
-
-        //		manager.DetectGesture(userId, KinectGestures.Gestures.Push);
-        //		manager.DetectGesture(userId, KinectGestures.Gestures.Pull);
-
-        //		manager.DetectGesture(userId, KinectWrapper.Gestures.SwipeUp);
-        //		manager.DetectGesture(userId, KinectWrapper.Gestures.SwipeDown);
+        manager.DetectGesture(userId, KinectGestures.Gestures.Squat);
 
         if (GestureInfo != null)
         {
@@ -58,12 +49,14 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
         }
     }
 
+    // This method is called when the user is lost
     public void UserLost(long userId, int userIndex)
     {
         if (GestureInfo != null)
         {
             GestureInfo.text = string.Empty;
         }
+        ShowStartMessage();
     }
 
     public void GestureInProgress(long userId, int userIndex, KinectGestures.Gestures gesture,
@@ -114,9 +107,13 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
         {
             OnSwipeRight();
         }
-        else if (gesture == KinectGestures.Gestures.SwipeDown || gesture == KinectGestures.Gestures.SwipeUp)
+        else if (gesture == KinectGestures.Gestures.SwipeUp)
         {
-            ball.ResetCounters();
+            OnStart();
+        }
+        else if(gesture == KinectGestures.Gestures.Squat)
+        {
+            OnResetCounters();
         }
 
         progressDisplayed = false;
@@ -147,6 +144,23 @@ public class GestureManager : MonoBehaviour, KinectGestures.GestureListenerInter
     public void OnSwipeRight()
     {
         SpawnBall();
+    }
+
+    public void OnStart()
+    {
+        spawnMessage.gameObject.SetActive(false);
+    }
+
+    public void ShowStartMessage()
+    {
+        ball.AllMessagesOff();
+        spawnMessage.gameObject.SetActive(true);
+        OnResetCounters();
+    }
+
+    public void OnResetCounters()
+    {
+        ball.ResetCounters();
     }
 
     private void ResetPlayerPosition()

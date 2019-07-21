@@ -135,7 +135,7 @@ public class BallBehaviour : MonoBehaviour
         }
     }
 
-    private void AllMessagesOff()
+    public void AllMessagesOff()
     {
         missMessage.gameObject.SetActive(false);
         goalMessage.gameObject.SetActive(false);

@@ -81,13 +81,13 @@
 
 
 % color handling
-%\definecolor{TumBlue}{cmyk}{1,0.43,0,0}
-\definecolor{TumBlue}{cmyk}{0.64,0.36,0,0.32}
+\definecolor{TumBlue}{cmyk}{1,0.43,0,0}
+%\definecolor{TumBlue}{cmyk}{0.64,0.36,0,0.32}
 \colorlet{blocktitlebgcolor}{TumBlue}
 \colorlet{backgroundcolor}{white}
 
 % title matter
-\title{Torwandschießen}
+\title{Kickinect - Torwandschießen}
 
 \author[]{Marcel Brunner}
 \author[]{Kevin Bein}
@@ -115,52 +115,32 @@ Both holes are just slightly bigger than the diameter of the ball which makes it
 When either of the two holes is hit by the ball, the corresponding points are accredited.
 The game ends after five tries.
 \\
+%\begin{center}
+%\includegraphics[width=800px]{intro}
+%\begin{flushleft}
+%\begin{center}
+%\textit{Figure 1: Intro}
+%\end{center}
+%\end{flushleft}
+%\end{center}
+%\begin{center}
+%\includegraphics[width=800px]{intro2}
+%\begin{flushleft}
+%\begin{center}
+%\textit{Figure 2: Intro 2}
+%\end{center}
+%\end{flushleft}
+%\end{center}
 \begin{center}
-\includegraphics[width=800px]{intro}
+\includegraphics[width=800px]{../Screenshots/intro}
 \begin{flushleft}
 \begin{center}
-\textit{Figure 1: Intro}
-\end{center}
-\end{flushleft}
-\end{center}
-\begin{center}
-\includegraphics[width=800px]{intro2}
-\begin{flushleft}
-\begin{center}
-\textit{Figure 2: Intro 2}
+\textit{Figure 1: Welcome screen}
 \end{center}
 \end{flushleft}
 \end{center}
 }
-\block{Overview}{
-\begin{flushleft}
-A Microsoft Kinect Sensor is used to track the player and his movements.
-From this input data and the kinect SDK, a body skeleton is calculated and extracted (TODO: figure 2).
-By using \textit{Linear Blend Skinning}, this skeleton is mapped onto the 3D Model of a football player in Unity.
-For this game, it is especially important to detect movements of the lower body: the player's hips, knees, legs and feet.
-With the movement mapped to the model, the only thing left is to construct hitboxes around the players feet.
-\end{flushleft}
-\begin{flushleft}
-The scene consists of the Torwand and a ball, both which are hittable.
-Since the implementation of the collision detection and physics calculation are not directly related to this project, we are using Unity's build-in features.
-Still, the model parameters, the position of the ball relative to the player, the hitbox sizes and shapes as well as the velocity calculation for when the player hits the ball need to be optimized and tuned manually.
-With this setup, the only thing left is for the player to hit the ball with an appropriate angle and accelerate it towards the Torwand.
-\end{flushleft}
-}
 
-
-}
-
-%%\block{Implementation}{
-%The setup 
-%}
-%
-%\block{Optimizations}{
-%- Hitboxes around the feet to accurately hit the ball
-%}
-%}
-
-\column{0.5}{
 \block{Linear Blend Skinning}{
 Linear blend skinning (\textit{LBS}) is used to deform a mesh by utilizing its skeletal structures.
 This is especially interesting to render human body or animal movements.
@@ -190,14 +170,90 @@ Finally, this formula can be applied to the resting pose:
 \begin{equation}
 \bar{t}_i^\prime = \sum_{k=1}^K \omega_{k,i} G^\prime_k(\vec{theta}, J) \bar{t}_i
 \end{equation}
+
+%\begin{center}
+%\includegraphics[width=800px]{resting_pose}
+%\begin{flushleft}
+%\begin{center}
+%\textit{Figure 3: Resting pose}
+%\end{center}
+%\end{flushleft}
+%\end{center}
+
 \begin{center}
-\includegraphics[width=800px]{resting_pose}
+\includegraphics[width=800px]{../Screenshots/weight_colors}
 \begin{flushleft}
 \begin{center}
-\textit{Figure 3: Resting pose}
+\textit{Figure 3: Body weights joints applied to the skeleton and player figure}
 \end{center}
 \end{flushleft}
 \end{center}
+}
+}
+
+
+%%\block{Implementation}{
+%The setup 
+%}
+%
+%\block{Optimizations}{
+%- Hitboxes around the feet to accurately hit the ball
+%}
+%}
+
+\column{0.5}{
+\block{Overview}{
+\begin{flushleft}
+A Microsoft Kinect Sensor is used to track the player and his movements.
+From this input data and the kinect SDK, a body skeleton is calculated and extracted (TODO: figure 2).
+By using \textit{Linear Blend Skinning}, this skeleton is mapped onto the 3D Model of a football player in Unity.
+For this game, it is especially important to detect movements of the lower body: the player's hips, knees, legs and feet.
+With the movement mapped to the model, the only thing left is to construct hitboxes around the players feet.
+\end{flushleft}
+\begin{flushleft}
+The scene consists of the Torwand and a ball, both which are hittable.
+Since the implementation of the collision detection and physics calculation are not directly related to this project, we are using Unity's build-in features.
+Still, the model parameters, the position of the ball relative to the player, the hitbox sizes and shapes as well as the velocity calculation for when the player hits the ball need to be optimized and tuned manually.
+With this setup, the only thing left is for the player to hit the ball with an appropriate angle and accelerate it towards the Torwand.
+\end{flushleft}
+
+\begin{center}
+\includegraphics[width=800px]{../Screenshots/main/shooting_scene}
+\begin{flushleft}
+\begin{center}
+\textit{Figure 2: Shooting scene}
+\end{center}
+\end{flushleft}
+\end{center}
+}
+
+\block{Challenges}{
+\textbf{Ball velocity}
+
+Calculating the velocity with which the ball is accelerated towards the Torwand must be tuned manually.
+The following aspects account for a realistic value:
+{\begin{enumerate}
+  \setlength{\itemsep}{0pt}
+  \item The distance of the player to the Torwand
+  \item The overall scaling of the scene
+  \item The size of the ball in relation to the player
+  \item The amount of hitboxes around the players feet as well as their shape
+  \item The angle of the hit and the rapidity of the body movement when swinging the foot
+  \item The mass of the Ball and the foot
+\end{enumerate}}
+The first four aspects can be tuned directly in Unity's physics and modle framework by modifying the parameters of the models and rigid bodies.
+For the fifth and sixth aspect, applying the formula of an elastic collision yielded very good results:
+\[
+v = (2 \cdot m_{\text{ball}} \cdot v_{\text{ball}} + (m_{\text{foot}} - m_{\text{ball}}) \cdot v_{\text{foot}}) / (m_{\text{ball}} + m_{\text{foot}})
+\]
+\\
+\textbf{Synchronization}
+
+The biggest challenge comes from synchronizing the Kinect SDK with Unity.
+The Kinect is recording an input stream with a depth map and through the SDK, it provides the joints of the body (25 joints in total) and their rotations.
+Even though, ultimately, thes values are correct, the joints and rotations do not follow the convention of literature on this topic.
+
+MISSING EXPLANATION
 }
 }
 
