@@ -14,9 +14,26 @@
 \usepackage{pgfplots}
 % align columns of tikzposter; needs two compilations
 \usepackage[colalign]{column_aligned}
+\usepackage{graphics}
 \RequirePackage[nottoc]{tocbibind}
 
 
+\def\kk{KicKinect}
+\def\kki{\textit{\kk}}
+\def\linearBlendSkinning{\textit{\linearBlendSkinningn}}
+\def\linearBlendSkinningn{Linear Blend Skinning}
+\def\lbs{\textit{LBS}}
+\newcommand{\image}[3]{
+	\begin{center}
+		\includegraphics[width=#3]{#1}
+		\
+		\begin{flushleft}
+			\begin{center}
+				\textit{#2}
+			\end{center}
+		\end{flushleft}
+	\end{center}
+}
 % tikzposter meta settings
 \usetheme{Default}
 \usetitlestyle{Default}
@@ -87,9 +104,9 @@
 \colorlet{backgroundcolor}{white}
 
 % title matter
-\title{Kickinect - Torwandschießen}
+\title{\kk{} - Torwandschießen}
 
-\author[]{Marcel Brunner}
+\author[]{Marcel Bruckner}
 \author[]{Kevin Bein}
 \author[]{Jonas Schulz}
 \author[]{Chandramohan Sudar}
@@ -107,88 +124,66 @@
 
 \begin{columns}
 \column{0.5}{
-\block{Game}{
-In the game \textit{Torwandschießen}, the player tries to kick a football through two openings in a wall.
-One hole is aligned at the bottom left and the other hole is at the top right.
-The player has five tries to kick the Ball through either of the two openings and collect points (1 point for the bottom and 3 points for the top hole).
-Both holes are just slightly bigger than the diameter of the ball which makes it difficult to hit.
-When either of the two holes is hit by the ball, the corresponding points are accredited.
-The game ends after five tries.
-\\
-%\begin{center}
-%\includegraphics[width=800px]{intro}
-%\begin{flushleft}
-%\begin{center}
-%\textit{Figure 1: Intro}
-%\end{center}
-%\end{flushleft}
-%\end{center}
-%\begin{center}
-%\includegraphics[width=800px]{intro2}
-%\begin{flushleft}
-%\begin{center}
-%\textit{Figure 2: Intro 2}
-%\end{center}
-%\end{flushleft}
-%\end{center}
-\begin{center}
-\includegraphics[width=800px]{../Screenshots/intro}
-\begin{flushleft}
-\begin{center}
-\textit{Figure 1: Welcome screen}
-\end{center}
-\end{flushleft}
-\end{center}
-}
+	\block{\kk}{
+		\kki{} is the implementation of the game \textit{Torwandschießen} where the player tries to kick a football through two openings in a wall.
+		One hole is aligned at the bottom left and the other hole is at the top right.
+		The player tries to kick the Ball through either of the two openings and collect points (1 point for the bottom and 3 points for the top hole).
+		Both holes are just slightly bigger than the diameter of the ball which makes it difficult to hit.
+		When either of the two holes is hit by the ball, the corresponding points are accredited.
+		\image{../Screenshots/intro}{Figure 1: Welcome screen of KicKinect}{800px}
+	}
 
-\block{Linear Blend Skinning}{
-Linear blend skinning (\textit{LBS}) is used to deform a mesh by utilizing its skeletal structures.
-This is especially interesting to render human body or animal movements.
-\textit{LBS} is a very efficient algorithm due to its linear character and as a result can be used for real-time renderings.
-The main drawback of this algorithm are bend postures, e.g. armpit distortions.
-There are a couple of improvements to basic \textit{LBS} which resolve this problem, most noteworthy is skinning with dual quaternions %\cite{dual_quaternions}
-For this project, \textit{LBS} in its basic form is sufficient since only the lower body parts are interesting and these are usually not prone to heavy bending.
-\textit{LBS} uses the Rodrigues formula to calculate its rotation matrix
-\begin{equation}
-\mathrm{R} = e^{\hat{\vec{\omega}}} = \mathrm{I} + \hat{\vec{\omega}} \sin{||\vec{\omega}_j||} + \hat{\vec{\omega}}^2 (1 - \cos{||\vec{\omega}_j})
-\end{equation}
-which ultimately looks as follows:
-\begin{equation}
-G(\vec{\omega}, j) = \begin{pmatrix}[e^{\vec{\omega}}]_{3\times 3} & j_{3\times 1} \\ 0_{1\times 3} & 1]\end{pmatrix}
-\end{equation}
-This rotation matrix is applied linearily to all related body parts along the sceleton structure.
-For example, when the leg moves, it directly influences the position of the knee, the feet and the the toes.
-Another example is the shoulder: When it moves, it influences the position of the elbow, the hand and the fingers.
-Mathematically, this corresponds to chaining $G(\vec{\omega}, j)$:
-\begin{equation}
-G(\vec{\omega}_1,\vec{\omega}_2,\ldots,\vec{\omega_k}, j_1, j_2, \ldots, j_k) = G(\vec{\omega}_1, j_1) \cdot G(\vec{\omega}_1, j_1) \cdot \ldots \cdots G(\vec{\omega}_k, j_k)
-\end{equation}
-where $||\vec{\omega}_j||$ is the angle of ration and $\vec{\omega}_j$ is the scaled axis of the rotation.
-
-The $\omega$s are already provided by the Kinect itself as well as the joint locations $J = (j_1, \ldots, j_k)^T$.
-Finally, this formula can be applied to the resting pose:
-\begin{equation}
-\bar{t}_i^\prime = \sum_{k=1}^K \omega_{k,i} G^\prime_k(\vec{theta}, J) \bar{t}_i
-\end{equation}
-
-%\begin{center}
-%\includegraphics[width=800px]{resting_pose}
-%\begin{flushleft}
-%\begin{center}
-%\textit{Figure 3: Resting pose}
-%\end{center}
-%\end{flushleft}
-%\end{center}
-
-\begin{center}
-\includegraphics[width=800px]{../Screenshots/weight_colors}
-\begin{flushleft}
-\begin{center}
-\textit{Figure 3: Body weights joints applied to the skeleton and player figure}
-\end{center}
-\end{flushleft}
-\end{center}
-}
+	\block{\linearBlendSkinningn{}}{
+		\linearBlendSkinning{} (\lbs{}) is used to deform a mesh by utilizing its skeletal structures.
+		This is especially interesting to render human body or animal movements. \lbs{} is a very efficient algorithm due to its linear character and as a result can be used for real-time renderings.
+		To calculate the per vertex translation and rotation the kinematic chain of the bone structure is used.\\		
+		\image{./images/joint.png}{Figure 2: The bone orientation vector}{200px}		
+		
+%		The main drawback of this algorithm are bend postures, e.g. armpit distortions.
+%		There are a couple of improvements to basic \lbs{} which resolve this problem, most noteworthy is skinning with dual quaternions %\cite{dual_quaternions}
+		For this project, \lbs{} in its basic form is implemented.
+		The translation vector of the bone is defined as the joint position $j$, $\vec{\omega}_j$ is the scaled axis of the rotation and $||\vec{\omega}_j||$ is the angle of rotation. Using the Rodrigues formula the rotation matrix $R$ based on the bone orientation $\vec{\omega}_j$ is calculated as:
+		%
+		\begin{equation}
+			\mathrm{R} = e^{\hat{\vec{\omega}}} = \mathrm{I} + \hat{\vec{\omega}} \sin{||\vec{\omega}_j||} + \hat{\vec{\omega}}^2 (1 - \cos{||\vec{\omega}_j})
+		\end{equation}
+		%
+		The rotation matrix $R$ forms together with the translation vector $j$ the overall per vertex transformation matrix $G$ for the bone:
+		%
+		\begin{equation}
+			G(\vec{\omega}, j) = \begin{pmatrix}[e^{\vec{\omega}}]_{3\times 3} & j_{3\times 1} \\ 0_{1\times 3} & 1]\end{pmatrix}
+		\end{equation}
+		%
+		Due to the natural chaining of the bones along the spine and extremities the calculation of adjacent joints corresponds to a chaining of transformation matrices:
+		\image{./images/chain.png}{Figure 3: The kinematic chain along adjacent joints}{500px}
+%		For example, when the leg moves, it directly influences the position of the knee, the feet and the the toes.
+%		Another example is the shoulder: When it moves, it influences the position of the elbow, the hand and the fingers.
+		The final transformation matrix $G$ of the bones along the kinematic chain is calculated as a concatenation of per bone matrices $G(\vec{\omega}_j, j)$:
+		%
+		\begin{equation}
+			G(\vec{\omega}_1,\vec{\omega}_2,\ldots,\vec{\omega_k}, j_1, j_2, \ldots, j_k) = G(\vec{\omega}_1, j_1) \cdot G(\vec{\omega}_1, j_1) \cdot \ldots \cdots G(\vec{\omega}_k, j_k)
+		\end{equation}
+		%		
+%		The $\omega$s are already provided by the Kinect itself as well as the joint locations $J = (j_1, \ldots, j_k)^T$.
+		To calculate the mesh deformation based on the kinematic chain transformations $G$ the rest pose vertices $\bar{t}_i$ and the per vertex assigned bone weights $w_{k,i}$ are used. The final transformed vertex position $\bar{t}_i^\prime$ is calculated by using:
+		\begin{equation}
+		\bar{t}_i^\prime = \sum_{k=1}^K w_{k,i} G^\prime_k(\vec{\theta}, J) \bar{t}_i
+		\end{equation}
+		
+		%\begin{center}
+		%\includegraphics[width=800px]{resting_pose}
+		%\begin{flushleft}
+		%\begin{center}
+		%\textit{Figure 3: Resting pose}
+		%\end{center}
+		%\end{flushleft}
+		%\end{center}
+		
+%		\begin{figure}[h]
+%			\includegraphics[width=800px]{../Screenshots/weight_colors}
+%			\caption{Body weights joints applied to the skeleton and player figure}
+%		\end{figure}
+	}
 }
 
 
@@ -202,65 +197,65 @@ Finally, this formula can be applied to the resting pose:
 %}
 
 \column{0.5}{
-\block{Overview}{
-\begin{flushleft}
-A Microsoft Kinect Sensor is used to track the player and his movements.
-From this input data and the kinect SDK, a body skeleton is calculated and extracted (TODO: figure 2).
-By using \textit{Linear Blend Skinning}, this skeleton is mapped onto the 3D Model of a football player in Unity.
-For this game, it is especially important to detect movements of the lower body: the player's hips, knees, legs and feet.
-With the movement mapped to the model, the only thing left is to construct hitboxes around the players feet.
-\end{flushleft}
-\begin{flushleft}
-The scene consists of the Torwand and a ball, both which are hittable.
-Since the implementation of the collision detection and physics calculation are not directly related to this project, we are using Unity's build-in features.
-Still, the model parameters, the position of the ball relative to the player, the hitbox sizes and shapes as well as the velocity calculation for when the player hits the ball need to be optimized and tuned manually.
-With this setup, the only thing left is for the player to hit the ball with an appropriate angle and accelerate it towards the Torwand.
-\end{flushleft}
-
-\begin{center}
-\includegraphics[width=800px]{../Screenshots/main/shooting_scene}
-\begin{flushleft}
-\begin{center}
-\textit{Figure 2: Shooting scene}
-\end{center}
-\end{flushleft}
-\end{center}
-}
-
-\block{Challenges}{
-\textbf{Ball velocity}
-
-Calculating the velocity with which the ball is accelerated towards the Torwand must be tuned manually.
-The following aspects account for a realistic value:
-{\begin{enumerate}
-  \setlength{\itemsep}{0pt}
-  \item The distance of the player to the Torwand
-  \item The overall scaling of the scene
-  \item The size of the ball in relation to the player
-  \item The amount of hitboxes around the players feet as well as their shape
-  \item The angle of the hit and the rapidity of the body movement when swinging the foot
-  \item The mass of the Ball and the foot
-\end{enumerate}}
-The first four aspects can be tuned directly in Unity's physics and modle framework by modifying the parameters of the models and rigid bodies.
-For the fifth and sixth aspect, applying the formula of an elastic collision yielded very good results:
-\[
-v = (2 \cdot m_{\text{ball}} \cdot v_{\text{ball}} + (m_{\text{foot}} - m_{\text{ball}}) \cdot v_{\text{foot}}) / (m_{\text{ball}} + m_{\text{foot}})
-\]
-\\
-\textbf{Synchronization}
-
-The biggest challenge comes from synchronizing the Kinect SDK with Unity.
-The Kinect is recording an input stream with a depth map and through the SDK, it provides the joints of the body (25 joints in total) and their rotations.
-Even though, ultimately, thes values are correct, the joints and rotations do not follow the convention of literature on this topic.
-
-MISSING EXPLANATION
-}
+	\block{Overview}{
+		\begin{flushleft}
+		A Microsoft Kinect Sensor is used to track the player and his movements.
+		From this input data and the kinect SDK, a body skeleton is calculated and extracted (TODO: figure 2).
+		By using \linearBlendSkinning{} this skeleton is mapped onto the 3D Model of a football player in Unity.
+		For this game, it is especially important to detect movements of the lower body: the player's hips, knees, legs and feet.
+		With the movement mapped to the model, the only thing left is to construct hitboxes around the players feet.
+		\end{flushleft}
+		\begin{flushleft}
+		The scene consists of the Torwand and a ball, both which are hittable.
+		Since the implementation of the collision detection and physics calculation are not directly related to this project, we are using Unity's build-in features.
+		Still, the model parameters, the position of the ball relative to the player, the hitbox sizes and shapes as well as the velocity calculation for when the player hits the ball need to be optimized and tuned manually.
+		With this setup, the only thing left is for the player to hit the ball with an appropriate angle and accelerate it towards the Torwand.
+		\end{flushleft}
+		
+		\begin{center}
+		\includegraphics[width=800px]{../Screenshots/main/shooting_scene}
+		\begin{flushleft}
+		\begin{center}
+		\textit{Figure 2: Shooting scene}
+		\end{center}
+		\end{flushleft}
+		\end{center}
+	}
+	
+	\block{Challenges}{
+		\textbf{Ball velocity}
+		
+		Calculating the velocity with which the ball is accelerated towards the Torwand must be tuned manually.
+		The following aspects account for a realistic value:
+		{\begin{enumerate}
+		  \setlength{\itemsep}{0pt}
+		  \item The distance of the player to the Torwand
+		  \item The overall scaling of the scene
+		  \item The size of the ball in relation to the player
+		  \item The amount of hitboxes around the players feet as well as their shape
+		  \item The angle of the hit and the rapidity of the body movement when swinging the foot
+		  \item The mass of the Ball and the foot
+		\end{enumerate}}
+		The first four aspects can be tuned directly in Unity's physics and modle framework by modifying the parameters of the models and rigid bodies.
+		For the fifth and sixth aspect, applying the formula of an elastic collision yielded very good results:
+		\[
+		v = (2 \cdot m_{\text{ball}} \cdot v_{\text{ball}} + (m_{\text{foot}} - m_{\text{ball}}) \cdot v_{\text{foot}}) / (m_{\text{ball}} + m_{\text{foot}})
+		\]
+		\\
+		\textbf{Synchronization}
+		
+		The biggest challenge comes from synchronizing the Kinect SDK with Unity.
+		The Kinect is recording an input stream with a depth map and through the SDK, it provides the joints of the body (25 joints in total) and their rotations.
+		Even though, ultimately, thes values are correct, the joints and rotations do not follow the convention of literature on this topic.
+		
+		MISSING EXPLANATION
+	}
 }
 
 \end{columns}
 
 \bibliographystyle{plain} 
-\bibliography{references}         
+%\bibliography{references}         
 
 
 \end{document}
